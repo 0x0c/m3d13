@@ -4,8 +4,8 @@ m3d13
 
 This is beta version.
 
-m3d.{h,cpp}...core library.
-
-xm3d.{h,cpp}...rendering engine using xlib.
-
+===
+	m3d.{h,cpp}...core library.
+	xm3d.{h,cpp}...rendering engine using xlib.
+===
 Developing on OSX 10.9 using XQuartz2.7.5.
