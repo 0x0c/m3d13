@@ -6,6 +6,7 @@
 //  Copyright (c) 2013年 Akira Matsuda. All rights reserved.
 //
 
+#include <sstream>
 #include <vector>
 #include "xm3d.h"
 
@@ -32,6 +33,9 @@ void xm3d::draw()
 			v.multiply(m_);
 			XFillArc(display_, pix_map_, graphic_context_, v.x - 5 / 2, v.y - 5 / 2, 5, 5, 0, 360 * 64);
 #ifdef __M3D__DEBUG__
+			std::ostringstream stream;
+			stream << i;
+			XDrawString(display_, pix_map_, graphic_context_, v.x - 5 / 2, v.y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
 			cout << i++ << ":(" << v.x << "," << v.y << ")" << endl;
 #endif
 		}

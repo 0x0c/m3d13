@@ -20,12 +20,16 @@ int main(int argc, const char * argv[])
 	cout << "Hello, World!" << endl;
 
 	auto *cube = Object::cube("cube");
+	auto *pyramid = Object::pyramid3("pyramid");
 	
 	cube->transform(Matrix::scale(10, 10, 10));
-	auto view = new xm3d(800, 800, "cube", [cube](unsigned int life, XEvent e, Window window) {
+	pyramid->transform(Matrix::scale(3, 3, 3));
+	auto view = new xm3d(800, 800, "xm3d", [=](unsigned int life, XEvent e, Window window) {
 		cube->transform(Matrix::rotate(m3d_axis_y, 0.01));
+		pyramid->transform(Matrix::rotate(m3d_axis_y, 0.01));
 	});
 	view->add_obj(cube);
+	view->add_obj(pyramid);
 	view->run();
 	
 	return 0;

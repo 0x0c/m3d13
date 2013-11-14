@@ -181,11 +181,11 @@ namespace m3d
 			return cube;
 		};
 		static Object* pyramid3(std::string name) {
-			Object *cube = new Object({
-				new Vector(-1, -1,  1),
+			Object *pyramid3 = new Object({
+				new Vector(-1, -1, -1),
+				new Vector(-1,  1,  1),
+				new Vector( 1,  1, -1),
 				new Vector( 1, -1,  1),
-				new Vector( 0, -1, -1),
-				new Vector( 0,  1,  0),
 			}, {
 				new Wire(0, 1),
 				new Wire(1, 2),
@@ -195,7 +195,7 @@ namespace m3d
 				new Wire(2, 3),
 			}, name);
 			
-			return cube;
+			return pyramid3;
 		};
 
 		/* data */
