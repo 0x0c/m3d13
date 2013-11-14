@@ -153,6 +153,33 @@ namespace m3d
 		};
 		Object* transform(const Matrix *m);
 		Object* transform(const std::array<double, 16> m);
+		static Object* cube(std::string name) {
+			Object *cube = new Object({
+				new Vector(-1, -1, -1),
+				new Vector( 1, -1, -1),
+				new Vector( 1,  1, -1),
+				new Vector(-1,  1, -1),
+				new Vector(-1, -1,  1),
+				new Vector( 1, -1,  1),
+				new Vector( 1,  1,  1),
+				new Vector(-1,  1,  1)
+			}, {
+				new Wire(0, 1),
+				new Wire(1, 2),
+				new Wire(2, 3),
+				new Wire(3, 0),
+				new Wire(4, 5),
+				new Wire(5, 6),
+				new Wire(6, 7),
+				new Wire(7, 4),
+				new Wire(0, 4),
+				new Wire(1, 5),
+				new Wire(2, 6),
+				new Wire(3, 7),
+			}, name);
+			
+			return cube;
+		};
 
 		/* data */
 		std::string name;
