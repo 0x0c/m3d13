@@ -13,7 +13,6 @@
 
 void xm3d::add_obj(Object *object)
 {
-	object->transform(m_);
 	this->objects_->push_back(object);
 }
 
@@ -29,10 +28,11 @@ void xm3d::draw()
 #endif
 		XSetForeground(display_, graphic_context_, 0xff00ff);
 		for(it_v = object->vertex.begin(); it_v != object->vertex.end(); ++it_v) {
-			Vector *v = (Vector *)*it_v;
-			XFillArc(display_, pix_map_, graphic_context_, v->x - 5 / 2, v->y - 5 / 2, 5, 5, 0, 360 * 64);
+			Vector v = Vector(*(Vector *)*it_v);
+			v.multiply(m_);
+			XFillArc(display_, pix_map_, graphic_context_, v.x - 5 / 2, v.y - 5 / 2, 5, 5, 0, 360 * 64);
 #ifdef __M3D__DEBUG__
-			cout << i++ << ":(" << v->x << "," << v->y << ")" << endl;
+			cout << i++ << ":(" << v.x << "," << v.y << ")" << endl;
 #endif
 		}
 		
@@ -40,7 +40,12 @@ void xm3d::draw()
 		vector<Wire *>::iterator it_w = object->wire.begin();
 		for (it_w = object->wire.begin(); it_w != object->wire.end(); ++it_w) {
 			Wire *w = (Wire *)*it_w;
-			XDrawLine(display_, pix_map_, graphic_context_, object->vertex[w->a]->x, object->vertex[w->a]->y, object->vertex[w->b]->x, object->vertex[w->b]->y);
+			Vector v1 = Vector(*object->vertex[w->a]);
+			v1.multiply(m_);
+			Vector v2 = Vector(*object->vertex[w->b]);
+			v2.multiply(m_);
+
+			XDrawLine(display_, pix_map_, graphic_context_, v1.x, v1.y, v2.x, v2.y);
 		}
 	}
 	
