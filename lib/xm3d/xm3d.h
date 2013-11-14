@@ -19,8 +19,6 @@
 #include <X11/Xlocale.h>
 #include "m3d.h"
 
-//#define __M3D__DEBUG__ 1
-
 using namespace std;
 using namespace m3d;
 
