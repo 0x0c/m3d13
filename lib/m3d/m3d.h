@@ -31,8 +31,8 @@ namespace m3d
 		Matrix(const std::array<double, 16> m) {
 			this->m = m;
 		};
-		Matrix *multiply(const Matrix *m);
-		Matrix *create_matrix_multiply(const Matrix *m);
+		Matrix* multiply(const Matrix *m);
+		Matrix* create_matrix_multiply(const Matrix *m);
 		void view(const Camera *camera);
 		void projection(const double angle, const double aspect, const double near, const double far);
 		void screen(const double x, const double y);
@@ -117,11 +117,11 @@ namespace m3d
 		double size();
 		void scaleTo(const double k);
 		void multiply(const Matrix *m);
-		Vector *create_vector_add(const Vector *v);
-		Vector *create_vector_sub(const Vector *v);
-		Vector *create_vector_cross(const Vector *v);
-		Vector *normalized_vector();
-		Vector *scaled_vector(const double k);
+		Vector* create_vector_add(const Vector *v);
+		Vector* create_vector_sub(const Vector *v);
+		Vector* create_vector_cross(const Vector *v);
+		Vector* normalized_vector();
+		Vector* scaled_vector(const double k);
 
 		/* data */
 		double x;
@@ -176,6 +176,23 @@ namespace m3d
 				new Wire(1, 5),
 				new Wire(2, 6),
 				new Wire(3, 7),
+			}, name);
+			
+			return cube;
+		};
+		static Object* pyramid3(std::string name) {
+			Object *cube = new Object({
+				new Vector(-1, -1,  1),
+				new Vector( 1, -1,  1),
+				new Vector( 0, -1, -1),
+				new Vector( 0,  1,  0),
+			}, {
+				new Wire(0, 1),
+				new Wire(1, 2),
+				new Wire(2, 0),
+				new Wire(0, 3),
+				new Wire(1, 3),
+				new Wire(2, 3),
 			}, name);
 			
 			return cube;
