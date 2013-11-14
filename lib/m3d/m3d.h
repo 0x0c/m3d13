@@ -14,7 +14,7 @@
 #include <array>
 #include <math.h>
 
-#define m3d_rad	(M_PI / 180.0)
+#define m3d_rad(x) x * (M_PI / 180.0)
 
 namespace m3d
 {
@@ -28,39 +28,40 @@ namespace m3d
 	class Matrix
 	{
 	public:
-		Matrix(std::array<double, 16> m) {
+		Matrix(const std::array<double, 16> m) {
 			this->m = m;
 		};
-		void multiply(const Matrix *m);
+		Matrix *multiply(const Matrix *m);
 		Matrix *create_matrix_multiply(const Matrix *m);
 		void view(const Camera *camera);
-		void projection(double angle, double aspect, double near, double far);
-		void screen(double x, double y);
-		static std::array<double, 16> rotate(m3d_axis axis, double angle) {
+		void projection(const double angle, const double aspect, const double near, const double far);
+		void screen(const double x, const double y);
+		static std::array<double, 16> rotate(const m3d_axis axis, const double angle) {
 			std::array<double, 16> r;
+			double rad = m3d_rad(angle);
 			switch (axis) {
 				case m3d_axis_x: {
 					r = {
 						1			,0			,0			,0,
-						0			,cos(angle)	,sin(angle)	,0,
-						0			,-sin(angle),cos(angle)	,0,
+						0			,cos(rad)	,sin(rad)	,0,
+						0			,-sin(rad)	,cos(rad)	,0,
 						0			,0			,0			,1
 					};
 				}
 					break;
 				case m3d_axis_y: {
 					r = {
-						cos(angle)	,0			,-sin(angle),0,
+						cos(rad)	,0			,-sin(rad),0,
 						0			,1			,0			,0,
-						sin(angle)	,0			,cos(angle)	,0,
+						sin(rad)	,0			,cos(rad)	,0,
 						0			,0			,0			,1
 					};
 				}
 					break;
 				case m3d_axis_z: {
 					r = {
-						cos(angle)	,sin(angle)	,0			,0,
-						-sin(angle)	,cos(angle)	,0			,0,
+						cos(rad)	,sin(rad)	,0			,0,
+						-sin(rad)	,cos(rad)	,0			,0,
 						0			,0			,1			,0,
 						0			,0			,0			,1
 					};
@@ -119,8 +120,8 @@ namespace m3d
 		Vector *create_vector_add(const Vector *v);
 		Vector *create_vector_sub(const Vector *v);
 		Vector *create_vector_cross(const Vector *v);
-		Vector* normalized_vector();
-		Vector* scale(const double k);
+		Vector *normalized_vector();
+		Vector *scaled_vector(const double k);
 
 		/* data */
 		double x;
@@ -145,13 +146,13 @@ namespace m3d
 	class Object
 	{
 	public:
-		Object(std::vector<Vector *>v, std::vector<Wire *>w, std::string n) {
+		Object(const std::vector<Vector *>v, const std::vector<Wire *>w, const std::string n) {
 			vertex = v;
 			wire = w;
 			name = n;
 		};
-		Object* transform(Matrix *m);
-		Object* transform(std::array<double, 16> m);
+		Object* transform(const Matrix *m);
+		Object* transform(const std::array<double, 16> m);
 
 		/* data */
 		std::string name;
@@ -172,8 +173,8 @@ namespace m3d
 			delete at;
 			delete up;
 		};
-		void lookup(Vector target);
-		void move(Vector to);
+		void lookup(const Vector target);
+		void move(const Vector to);
 		
 		/* data */
 		Vector *eye;

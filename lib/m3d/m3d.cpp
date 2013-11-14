@@ -6,8 +6,6 @@
 //  Copyright (c) 2013年 Akira Matsuda. All rights reserved.
 //
 
-#include <stdio.h>
-#include <string.h>
 #include "m3d.h"
 
 using namespace std;
@@ -15,18 +13,20 @@ using namespace m3d;
 
 #pragma mark - Matrix
 
-void Matrix::multiply(const Matrix *m)
+Matrix* Matrix::multiply(const Matrix *m)
 {
-	Matrix *a = new Matrix(*this);
+	Matrix a(*this);
 	for(int i = 0; i < 4; i++) {
 		for(int j = 0; j < 4; j++) {
 			double tmp = 0.0;
 			for(int k = 0; k < 4; k++) {
-				tmp += a->m[i * 4 + k] * m->m[k * 4 + j];
+				tmp += a.m[i * 4 + k] * m->m[k * 4 + j];
 			}
 			this->m[i * 4 + j] = tmp;
 		}
 	}
+	
+	return this;
 }
 
 Matrix* Matrix::create_matrix_multiply(const Matrix *m)
@@ -55,7 +55,7 @@ void Matrix::view(const Camera *camera)
 	}));
 }
 
-void Matrix::projection(double angle, double aspect, double near, double far)
+void Matrix::projection(const double angle, const double aspect, const double near, const double far)
 {
 	double sy = cos(angle * 0.5) / sin(angle * 0.5);
 	double sx =  sy / aspect;
@@ -68,7 +68,7 @@ void Matrix::projection(double angle, double aspect, double near, double far)
 	}));
 }
 
-void Matrix::screen(double x, double y)
+void Matrix::screen(const double x, const double y)
 {
  	double w,h;
  	w = x * 0.5;
@@ -184,14 +184,14 @@ Vector* Vector::normalized_vector()
 	return result;
 }
 
-Vector* Vector::scale(const double k)
+Vector* Vector::scaled_vector(const double k)
 {
 	return new Vector(this->x * k, this->y * k, this->z * k);
 }
 
 #pragma mark - Object
 
-Object* Object::transform(Matrix *m)
+Object* Object::transform(const Matrix *m)
 {
 	vector<Vector *>::iterator it_v = this->vertex.begin();
 	for (it_v = this->vertex.begin(); it_v != this->vertex.end(); ++it_v) {
@@ -202,7 +202,7 @@ Object* Object::transform(Matrix *m)
 	return this;
 }
 
-Object* Object::transform(std::array<double, 16> m)
+Object* Object::transform(const std::array<double, 16> m)
 {
 	Matrix t(m);
 	vector<Vector *>::iterator it_v = this->vertex.begin();

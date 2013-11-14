@@ -26,7 +26,7 @@ void xm3d::draw()
 		int i = 0;
 		cout << "node:" << object->name.c_str() << endl;
 #endif
-		XSetForeground(display_, graphic_context_, 0xff00ff);
+		XSetForeground(display_, graphic_context_, vertex_color);
 		for(it_v = object->vertex.begin(); it_v != object->vertex.end(); ++it_v) {
 			Vector v = Vector(*(Vector *)*it_v);
 			v.multiply(m_);
@@ -36,7 +36,7 @@ void xm3d::draw()
 #endif
 		}
 		
-		XSetForeground(display_, graphic_context_, 0x1e90ff);
+		XSetForeground(display_, graphic_context_, line_color);
 		vector<Wire *>::iterator it_w = object->wire.begin();
 		for (it_w = object->wire.begin(); it_w != object->wire.end(); ++it_w) {
 			Wire *w = (Wire *)*it_w;

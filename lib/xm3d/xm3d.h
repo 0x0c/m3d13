@@ -46,6 +46,8 @@ private:
 public:
 	double fps;
 	bool suspend = false;
+	unsigned int line_color = 0x1e90ff;
+	unsigned int vertex_color = 0xff00ff;
 	xm3d(const unsigned int width, const unsigned int height, const std::string name, std::function<void(unsigned int life, XEvent e, Window window)> event_callback) {
 		width_ = width;
 		height_ = height;
@@ -71,7 +73,7 @@ public:
 		camera_ = new Camera(new Vector(0, 0, 80), new Vector(0, 0, 0), new Vector(0, 1, 0));
 		m_ = new Matrix(Matrix::identity());
 		m_->view(camera_);
-		m_->projection(m3d_rad * 30, (double)width_ / (double)height_, 100.0, 1000.0);
+		m_->projection(m3d_rad(30), (double)width_ / (double)height_, 100.0, 1000.0);
 		m_->screen(width_, height_);
 		
 		event_callback_ = event_callback;
