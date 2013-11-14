@@ -44,7 +44,7 @@ private:
 	Matrix *m_;
 	std::function<void(unsigned int life, XEvent e, Window window)> event_callback_;
 public:
-	double fps;
+	unsigned int fps = 30;
 	bool suspend = false;
 	unsigned int line_color = 0x1e90ff;
 	unsigned int vertex_color = 0xff00ff;

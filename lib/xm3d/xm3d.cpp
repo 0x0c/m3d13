@@ -95,13 +95,13 @@ void xm3d::run()
 			this->draw();
 			XCopyArea(display_, pix_map_, window_, graphic_context_, 0, 0, width_, height_, 0, 0);
 			XSetForeground(display_, graphic_context_, black_);
-			usleep(1 / fps * 1000000);
-			life_++;
+			usleep(1.0 / fps * 1000000);
 		}
 		
 		if (event_callback_ != nullptr) {
 			event_callback_(life_, e_, window_);
 		}
 		XFlush(this->display_);
+		life_++;
 	}
 }
