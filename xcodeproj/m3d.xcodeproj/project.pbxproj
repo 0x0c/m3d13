@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E947C5661833E314000F2927 /* xm3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E947C5631833E314000F2927 /* xm3d.cpp */; };
 		E947C5671833E314000F2927 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E947C5651833E314000F2927 /* main.cpp */; };
-		E947C5681833E32F000F2927 /* m3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E947C5601833E30B000F2927 /* m3d.cpp */; };
+		E9C53726183483DD002F773E /* m3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9C53721183483CF002F773E /* m3d.cpp */; };
+		E9C53727183483DD002F773E /* xm3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9C53724183483CF002F773E /* xm3d.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,11 +25,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E947C5601833E30B000F2927 /* m3d.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = m3d.cpp; sourceTree = "<group>"; };
-		E947C5611833E30B000F2927 /* m3d.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = m3d.h; sourceTree = "<group>"; };
-		E947C5631833E314000F2927 /* xm3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xm3d.cpp; sourceTree = "<group>"; };
-		E947C5641833E314000F2927 /* xm3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xm3d.h; sourceTree = "<group>"; };
 		E947C5651833E314000F2927 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = source/main.cpp; sourceTree = "<group>"; };
+		E9C53721183483CF002F773E /* m3d.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = m3d.cpp; sourceTree = "<group>"; };
+		E9C53722183483CF002F773E /* m3d.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = m3d.h; sourceTree = "<group>"; };
+		E9C53724183483CF002F773E /* xm3d.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = xm3d.cpp; sourceTree = "<group>"; };
+		E9C53725183483CF002F773E /* xm3d.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xm3d.h; sourceTree = "<group>"; };
 		E9DD9BF418330618002D4A5D /* m3d */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = m3d; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -44,32 +44,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E947C55F1833E30B000F2927 /* lib */ = {
+		E9C5371F183483CF002F773E /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				E947C5601833E30B000F2927 /* m3d.cpp */,
-				E947C5611833E30B000F2927 /* m3d.h */,
+				E9C53720183483CF002F773E /* m3d */,
+				E9C53723183483CF002F773E /* xm3d */,
 			);
 			name = lib;
 			path = ../lib;
 			sourceTree = "<group>";
 		};
-		E947C5621833E314000F2927 /* frontend */ = {
+		E9C53720183483CF002F773E /* m3d */ = {
 			isa = PBXGroup;
 			children = (
-				E947C5631833E314000F2927 /* xm3d.cpp */,
-				E947C5641833E314000F2927 /* xm3d.h */,
+				E9C53721183483CF002F773E /* m3d.cpp */,
+				E9C53722183483CF002F773E /* m3d.h */,
 			);
-			name = frontend;
-			path = source/frontend;
+			path = m3d;
+			sourceTree = "<group>";
+		};
+		E9C53723183483CF002F773E /* xm3d */ = {
+			isa = PBXGroup;
+			children = (
+				E9C53724183483CF002F773E /* xm3d.cpp */,
+				E9C53725183483CF002F773E /* xm3d.h */,
+			);
+			path = xm3d;
 			sourceTree = "<group>";
 		};
 		E9DD9BEB18330618002D4A5D = {
 			isa = PBXGroup;
 			children = (
 				E947C5651833E314000F2927 /* main.cpp */,
-				E947C5621833E314000F2927 /* frontend */,
-				E947C55F1833E30B000F2927 /* lib */,
+				E9C5371F183483CF002F773E /* lib */,
 				E9DD9BF518330618002D4A5D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -133,9 +140,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E947C5681833E32F000F2927 /* m3d.cpp in Sources */,
+				E9C53726183483DD002F773E /* m3d.cpp in Sources */,
+				E9C53727183483DD002F773E /* xm3d.cpp in Sources */,
 				E947C5671833E314000F2927 /* main.cpp in Sources */,
-				E947C5661833E314000F2927 /* xm3d.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,6 +19,8 @@
 #include <X11/Xlocale.h>
 #include "m3d.h"
 
+//#define __M3D__DEBUG__ 1
+
 using namespace std;
 using namespace m3d;
 
@@ -41,10 +43,11 @@ private:
 	unsigned int life_ = 0;
 	Camera *camera_;
 	vector<Object *> *objects_;
-	std::function<void(unsigned int life, XEvent e, Window window)> event_callback_;
 	Matrix *m_;
+	std::function<void(unsigned int life, XEvent e, Window window)> event_callback_;
 public:
 	double fps;
+	bool suspend = false;
 	xm3d(const unsigned int width, const unsigned int height, const std::string name, std::function<void(unsigned int life, XEvent e, Window window)> event_callback) {
 		width_ = width;
 		height_ = height;
@@ -63,14 +66,11 @@ public:
 		XStoreName(display_, window_, name.c_str());
 		XSelectInput(display_, window_, ButtonPressMask | ButtonReleaseMask | KeyPressMask);
 		XSelectInput(display_, quit_, ButtonPressMask | ButtonReleaseMask | EnterWindowMask | LeaveWindowMask);
-
 		XMapWindow(display_, window_);
 		XMapSubwindows(display_, window_);
 
 		objects_ = new vector<Object *>;
-		
 		camera_ = new Camera(new Vector(0, 0, 80), new Vector(0, 0, 0), new Vector(0, 1, 0));
-		
 		m_ = new Matrix(Matrix::identity());
 		m_->view(camera_);
 		m_->projection(m3d_rad * 30, (double)width_ / (double)height_, 100.0, 1000.0);

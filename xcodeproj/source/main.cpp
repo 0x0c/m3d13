@@ -42,9 +42,13 @@ int main(int argc, const char * argv[])
 		new Wire(2, 6),
 		new Wire(3, 7),
 	}, "cube");
-	cube->transform(new Matrix(Matrix::scale(10, 10, 10)));
+
+	cube->transform(Matrix::scale(10, 10, 10))->transform(Matrix::rotate(m3d_axis_y, 40));
+	
+	static double r = 0;
 	auto *view = new xm3d(800, 600, "cube", [=](unsigned int life, XEvent e, Window window){
-		
+		cube->transform(Matrix::rotate(m3d_axis_y, sin(r)));
+		r += 0.05;
 	});
 	view->add_obj(cube);
 	view->run();

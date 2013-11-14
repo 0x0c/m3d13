@@ -37,13 +37,6 @@ Matrix* Matrix::create_matrix_multiply(const Matrix *m)
 	return result;
 }
 
-void Matrix::world_matrix(const Matrix *scale, const Matrix *rotate, const Matrix *move)
-{
-	this->multiply(scale);
-	this->multiply(rotate);
-	this->multiply(move);
-}
-
 void Matrix::view(const Camera *camera)
 {
 	Vector *a = camera->eye->create_vector_sub(camera->at);
@@ -151,8 +144,8 @@ void Vector::multiply(const Matrix *m)
 	double y = this->y;
 	double z = this->z;
 	double w = this->w;
- 	this->x = m->m[ 0] * x + m->m[ 4] * y + m->m[ 8] * z + m->m[12] * w;
- 	this->y = m->m[ 1] * x + m->m[ 5] * y + m->m[ 9] * z + m->m[13] * w;
+	this->x = m->m[ 0] * x + m->m[ 4] * y + m->m[ 8] * z + m->m[12] * w;
+	this->y = m->m[ 1] * x + m->m[ 5] * y + m->m[ 9] * z + m->m[13] * w;
 	this->z = m->m[ 2] * x + m->m[ 6] * y + m->m[10] * z + m->m[14] * w;
 	this->w = m->m[ 3] * x + m->m[ 7] * y + m->m[11] * z + m->m[15] * w;
 	
@@ -198,11 +191,25 @@ Vector* Vector::scale(const double k)
 
 #pragma mark - Object
 
-void Object::transform(Matrix *m)
+Object* Object::transform(Matrix *m)
 {
 	vector<Vector *>::iterator it_v = this->vertex.begin();
 	for (it_v = this->vertex.begin(); it_v != this->vertex.end(); ++it_v) {
 		Vector *v = (Vector *)*it_v;
 		v->multiply(m);
 	}
+	
+	return this;
+}
+
+Object* Object::transform(std::array<double, 16> m)
+{
+	Matrix t(m);
+	vector<Vector *>::iterator it_v = this->vertex.begin();
+	for (it_v = this->vertex.begin(); it_v != this->vertex.end(); ++it_v) {
+		Vector *v = (Vector *)*it_v;
+		v->multiply(&t);
+	}
+	
+	return this;
 }

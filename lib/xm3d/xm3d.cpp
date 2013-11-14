@@ -9,6 +9,8 @@
 #include <vector>
 #include "xm3d.h"
 
+#define __M3D__DEBUG__
+
 void xm3d::add_obj(Object *object)
 {
 	object->transform(m_);
@@ -20,15 +22,18 @@ void xm3d::draw()
 	vector<Object *>::iterator it_b = this->objects_->begin();
 	for (it_b = this->objects_->begin(); it_b != this->objects_->end(); ++it_b) {
 		Object *object = (Object *)*it_b;
-		cout << "node:" << object->name.c_str() << endl;
 		vector<Vector *>::iterator it_v = object->vertex.begin();
-		
+#ifdef __M3D__DEBUG__
 		int i = 0;
-		XSetForeground(display_, graphic_context_, 0xffff00);
+		cout << "node:" << object->name.c_str() << endl;
+#endif
+		XSetForeground(display_, graphic_context_, 0xff00ff);
 		for(it_v = object->vertex.begin(); it_v != object->vertex.end(); ++it_v) {
 			Vector *v = (Vector *)*it_v;
+			XFillArc(display_, pix_map_, graphic_context_, v->x - 5 / 2, v->y - 5 / 2, 5, 5, 0, 360 * 64);
+#ifdef __M3D__DEBUG__
 			cout << i++ << ":(" << v->x << "," << v->y << ")" << endl;
-			XFillArc(display_, pix_map_, graphic_context_, v->x, v->y, 5, 5, 0, 360 * 64);
+#endif
 		}
 		
 		XSetForeground(display_, graphic_context_, 0x1e90ff);
@@ -44,7 +49,8 @@ void xm3d::draw()
 
 void xm3d::run()
 {
-	while(true) {
+	suspend = false;
+	while(!suspend) {
 		if(XPending(display_)) {
 			XNextEvent(display_, &this->e_);
 			switch (e_.type) {
@@ -70,7 +76,9 @@ void xm3d::run()
 			}
 		}
 		else {
-			std::cout << "--draw!(" << life_++ << ")--" << endl;
+#ifdef __M3D__DEBUG__
+			cout << "--draw!(" << life_ << ")--" << endl;
+#endif
 			XDrawString(display_, quit_, graphic_context_, 4, 10, "QUIT", 4);
 			XSetForeground(display_, graphic_context_, white_);
 			XFillRectangle(display_, pix_map_, graphic_context_, 0, 0, width_, height_);
@@ -79,10 +87,12 @@ void xm3d::run()
 			XCopyArea(display_, pix_map_, window_, graphic_context_, 0, 0, width_, height_, 0, 0);
 			XSetForeground(display_, graphic_context_, black_);
 			usleep(1 / fps * 1000000);
+			life_++;
 		}
 		
 		if (event_callback_ != nullptr) {
 			event_callback_(life_, e_, window_);
 		}
+		XFlush(this->display_);
 	}
 }

@@ -33,7 +33,6 @@ namespace m3d
 		};
 		void multiply(const Matrix *m);
 		Matrix *create_matrix_multiply(const Matrix *m);
-		void world_matrix(const Matrix *scale, const Matrix *rotate, const Matrix *move);
 		void view(const Camera *camera);
 		void projection(double angle, double aspect, double near, double far);
 		void screen(double x, double y);
@@ -151,8 +150,9 @@ namespace m3d
 			wire = w;
 			name = n;
 		};
-		void transform(Matrix *m);
-		
+		Object* transform(Matrix *m);
+		Object* transform(std::array<double, 16> m);
+
 		/* data */
 		std::string name;
 		std::vector<Vector *>vertex;
