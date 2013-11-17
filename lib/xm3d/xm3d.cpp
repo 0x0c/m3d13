@@ -44,12 +44,11 @@ void xm3d::draw()
 		vector<Wire *>::iterator it_w = object->wire.begin();
 		for (it_w = object->wire.begin(); it_w != object->wire.end(); ++it_w) {
 			Wire *w = (Wire *)*it_w;
-			Vector v1 = Vector(*object->vertex[w->a]);
-			v1.multiply(m_);
-			Vector v2 = Vector(*object->vertex[w->b]);
-			v2.multiply(m_);
+			Vector *v1 = Vector(*object->vertex[w->a]).multiply(m_);
+			Vector *v2 = Vector(*object->vertex[w->b]).multiply(m_);
 
-			XDrawLine(display_, pix_map_, graphic_context_, v1.x, v1.y, v2.x, v2.y);
+			XDrawLine(display_, pix_map_, graphic_context_, v1->x, v1->y, v2->x
+					  , v2->y);
 		}
 	}
 	
