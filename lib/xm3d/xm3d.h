@@ -44,7 +44,7 @@ private:
 	Matrix *m_;
 	std::function<void(unsigned int life, XEvent e, Window window)> event_callback_;
 public:
-	unsigned int fps = 30;
+	unsigned int fps = 60;
 	bool suspend = false;
 	unsigned int line_color = 0x1e90ff;
 	unsigned int vertex_color = 0xff00ff;
@@ -72,10 +72,7 @@ public:
 		objects_ = new vector<Object *>;
 		camera_ = new Camera(new Vector(0, 0, 80), new Vector(0, 0, 0), new Vector(0, 1, 0));
 		m_ = new Matrix(Matrix::identity());
-		m_->view(camera_);
-		m_->projection(m3d_rad(30), (double)width_ / (double)height_, 100.0, 1000.0);
-		m_->screen(width_, height_);
-		
+		m_->view(camera_)->projection(m3d_rad(30), (double)width_ / (double)height_, 100.0, 1000.0)->screen(width_, height_);
 		event_callback_ = event_callback;
 	};
 	~xm3d() {
