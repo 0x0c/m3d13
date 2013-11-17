@@ -18,6 +18,14 @@
 
 namespace m3d
 {
+	class m3d
+	{
+	public:
+		static std::string version() {
+			return "1.0";
+		}
+	};
+	
 	typedef enum {
 		m3d_axis_x = 0,
 		m3d_axis_y,
