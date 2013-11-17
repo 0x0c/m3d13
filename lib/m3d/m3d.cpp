@@ -37,13 +37,13 @@ Matrix* Matrix::create_matrix_multiply(const Matrix *m)
 	return result;
 }
 
-void Matrix::view(const Camera *camera)
+Matrix* Matrix::view(const Camera *camera)
 {
-	Vector *a = camera->eye->create_vector_sub(camera->at);
-	Vector *z = a->normalized_vector();
-	Vector *b = camera->up->create_vector_cross(z);
-	Vector *x = b->normalized_vector();
-	Vector *y = z->create_vector_cross(x);
+	Vector *a = Vector(*camera->eye).sub(camera->at);
+	Vector *z = Vector(*a).normalize();
+	Vector *b = Vector(*Vector(*camera->eye->cross(camera->at)).normalize()).cross(z);
+	Vector *x = Vector(*b).normalize();
+	Vector *y = Vector(*z).cross(x);
 	double qx = camera->eye->dot(x);
 	double qy = camera->eye->dot(y);
 	double qz = camera->eye->dot(z);
@@ -51,11 +51,13 @@ void Matrix::view(const Camera *camera)
 		x->x, y->x, z->x, 0,
 		x->y, y->y, z->y, 0,
 		x->z, y->z, z->z, 0,
-		-qx,  -qy,  -qz, 1
+		 -qx,  -qy,  -qz, 1
 	}));
+	
+	return this;
 }
 
-void Matrix::projection(const double angle, const double aspect, const double near, const double far)
+Matrix* Matrix::projection(const double angle, const double aspect, const double near, const double far)
 {
 	double sy = cos(angle * 0.5) / sin(angle * 0.5);
 	double sx =  sy / aspect;
@@ -66,11 +68,13 @@ void Matrix::projection(const double angle, const double aspect, const double ne
  		0			,0			,sz			,1,
  		0			,0			,-sz * near	,0
 	}));
+	
+	return this;
 }
 
-void Matrix::screen(const double x, const double y)
+Matrix* Matrix::screen(const double x, const double y)
 {
- 	double w,h;
+ 	double w, h;
  	w = x * 0.5;
  	h = y * 0.5;
 
@@ -80,24 +84,30 @@ void Matrix::screen(const double x, const double y)
  		0	,0	,1	,0,
  		w	,h	,0	,1
  	}));
+	
+	return this;
 }
 
 #pragma mark - Vector
 
-void Vector::add(const Vector *v)
+Vector* Vector::add(const Vector *v)
 {
 	this->x += v->x;
 	this->y += v->y;
 	this->z += v->z;
 	this->w = 1;
+	
+	return this;
 }
 
-void Vector::sub(const Vector *v)
+Vector* Vector::sub(const Vector *v)
 {
 	this->x -= v->x;
 	this->y -= v->y;
 	this->z -= v->y;
 	this->w = 1;
+	
+	return this;
 }
 
 double Vector::dot(const Vector *v)
@@ -105,7 +115,7 @@ double Vector::dot(const Vector *v)
 	return this->x * v->x + this->y * v->y + this->z * v->z;
 }
 
-void Vector::cross(const Vector *v)
+Vector* Vector::cross(const Vector *v)
 {
 	double x = this->x;
 	double y = this->y;
@@ -114,15 +124,19 @@ void Vector::cross(const Vector *v)
 	this->y = z * v->x - x * v->z;
 	this->z = x * v->y - y * v->x;
 	this->w = 1;
+	
+	return this;
 }
 
-void Vector::normalize()
+Vector* Vector::normalize()
 {
 	double size = this->size();
 	this->x /= size;
 	this->y /= size;
 	this->z /= size;
 	this->w = 1;
+	
+	return this;
 }
 
 double Vector::size()
@@ -130,15 +144,17 @@ double Vector::size()
 	return sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2));
 }
 
-void Vector::scaleTo(const double k)
+Vector* Vector::scale(const double k)
 {
 	this->x *= k;
 	this->y *= k;
 	this->z *= k;
 	this->w = 1;
+	
+	return this;
 }
 
-void Vector::multiply(const Matrix *m)
+Vector* Vector::multiply(const Matrix *m)
 {
 	double x = this->x;
 	double y = this->y;
@@ -149,44 +165,9 @@ void Vector::multiply(const Matrix *m)
 	this->z = m->m[ 2] * x + m->m[ 6] * y + m->m[10] * z + m->m[14] * w;
 	this->w = m->m[ 3] * x + m->m[ 7] * y + m->m[11] * z + m->m[15] * w;
 	
-	this->scaleTo(1 / this->w);
-}
-
-Vector* Vector::create_vector_add(const Vector *v)
-{
-	Vector *result = new Vector(*this);
-	result->add(v);
+	this->scale(1 / this->w);
 	
-	return result;
-}
-
-Vector* Vector::create_vector_sub(const Vector *v)
-{
-	Vector *result = new Vector(*this);
-	result->sub(v);
-	
-	return result;
-}
-
-Vector* Vector::create_vector_cross(const Vector *v)
-{
-	Vector *result = new Vector(*this);
-	result->cross(v);
-	
-	return result;
-}
-
-Vector* Vector::normalized_vector()
-{
-	double size = this->size();
-	Vector *result = new Vector(this->x / size, this->y / size, this->z / size);
-	
-	return result;
-}
-
-Vector* Vector::scaled_vector(const double k)
-{
-	return new Vector(this->x * k, this->y * k, this->z * k);
+	return this;
 }
 
 #pragma mark - Object

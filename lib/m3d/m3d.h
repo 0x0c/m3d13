@@ -33,9 +33,10 @@ namespace m3d
 		};
 		Matrix* multiply(const Matrix *m);
 		Matrix* create_matrix_multiply(const Matrix *m);
-		void view(const Camera *camera);
-		void projection(const double angle, const double aspect, const double near, const double far);
-		void screen(const double x, const double y);
+		Matrix* view(const Camera *camera);
+		Matrix* projection(const double angle, const double aspect, const double near, const double far);
+		Matrix* screen(const double x, const double y);
+		
 		static std::array<double, 16> rotate(const m3d_axis axis, const double angle) {
 			std::array<double, 16> r;
 			double rad = m3d_rad(angle);
@@ -109,19 +110,14 @@ namespace m3d
 			this->z = z;
 			this->w = 1;
 		};
-		void add(const Vector *v);
-		void sub(const Vector *v);
+		Vector* add(const Vector *v);
+		Vector* sub(const Vector *v);
 		double dot(const Vector *v);
-		void cross(const Vector *v);
-		void normalize();
+		Vector* cross(const Vector *v);
+		Vector* normalize();
 		double size();
-		void scaleTo(const double k);
-		void multiply(const Matrix *m);
-		Vector* create_vector_add(const Vector *v);
-		Vector* create_vector_sub(const Vector *v);
-		Vector* create_vector_cross(const Vector *v);
-		Vector* normalized_vector();
-		Vector* scaled_vector(const double k);
+		Vector* scale(const double k);
+		Vector* multiply(const Matrix *m);
 
 		/* data */
 		double x;
@@ -151,6 +147,7 @@ namespace m3d
 			wire = w;
 			name = n;
 		};
+		~Object();
 		Object* transform(const Matrix *m);
 		Object* transform(const std::array<double, 16> m);
 		static Object* cube(std::string name) {
@@ -207,10 +204,10 @@ namespace m3d
 	class Camera
 	{
 	public:
-		Camera(Vector *e, Vector *a, Vector *u) {
-			this->eye = e;
-			this->at = a;
-			this->up = u;
+		Camera(Vector *eye, Vector *at, Vector *up) {
+			this->eye = eye;
+			this->at = at;
+			this->up = up;
 		};
 		~Camera() {
 			delete eye;
@@ -224,6 +221,43 @@ namespace m3d
 		Vector *eye;
 		Vector *at;
 		Vector *up;
+	};
+	
+	class Light
+	{
+	public:
+		Light(Vector *position, double brightness) {
+			this->position = position;
+			this->brightness = brightness;
+		};
+		~Light() {
+			delete position;
+		};
+		
+		/* data */
+		Vector *position;
+		double brightness;
+	};
+	
+	class SpotLight : public Light
+	{
+	public:
+		SpotLight(Vector *position, Vector *direction, double brightness) : Light(position, brightness) {
+			this->direction = direction;
+		};
+		~SpotLight() {
+			delete direction;
+		};
+		
+		/* data */
+		Vector *direction;
+	};
+	
+	class Polygon
+	{
+	public:
+		std::array<Vector *, 3> vertex;
+		int color;
 	};
 }
 
