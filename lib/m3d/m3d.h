@@ -18,13 +18,7 @@
 
 namespace m3d
 {
-	class m3d
-	{
-	public:
-		static std::string version() {
-			return "1.0";
-		}
-	};
+	static std::string version = "1.0";
 	
 	typedef enum {
 		m3d_axis_x = 0,
@@ -146,14 +140,80 @@ namespace m3d
 		int a;
 		int b;
 	};
-
+	
+	class Camera
+	{
+	public:
+		Camera(Vector *eye, Vector *at, Vector *up) {
+			this->eye = eye;
+			this->at = at;
+			this->up = up;
+		};
+		~Camera() {
+			delete eye;
+			delete at;
+			delete up;
+		};
+		void lookup(const Vector target);
+		void move(const Vector to);
+		
+		/* data */
+		Vector *eye;
+		Vector *at;
+		Vector *up;
+	};
+	
+	class Light
+	{
+	public:
+		Light(Vector *position, double brightness) {
+			this->position = position;
+			this->brightness = brightness;
+		};
+		~Light() {
+			delete position;
+		};
+		
+		/* data */
+		Vector *position;
+		double brightness;
+	};
+	
+	class DirectionalLight : public Light
+	{
+	public:
+		DirectionalLight(Vector *position, Vector *direction, double brightness) : Light(position, brightness) {
+			this->direction = direction;
+		};
+		~DirectionalLight() {
+			delete direction;
+		};
+		
+		/* data */
+		Vector *direction;
+	};
+	
+	class Polygon
+	{
+	public:
+		int real_color(Light *light);
+		
+		/* data */
+		std::array<Vector *, 3> vertex;
+		int color;
+	};
+	
 	class Object
 	{
 	public:
-		Object(const std::vector<Vector *>v, const std::vector<Wire *>w, const std::string n) {
-			vertex = v;
-			wire = w;
-			name = n;
+		Object(const std::vector<Vector *>vertex, const std::vector<Wire *>wire, const std::string name) {
+			this->vertex = vertex;
+			this->wire = wire;
+			this->name = name;
+		};
+		Object(const std::vector<Polygon *>polygon, const std::string name) {
+			this->polygon = polygon;
+			this->name = name;
 		};
 		~Object();
 		Object* transform(const Matrix *m);
@@ -202,70 +262,12 @@ namespace m3d
 			
 			return pyramid3;
 		};
-
+		
 		/* data */
 		std::string name;
 		std::vector<Vector *>vertex;
 		std::vector<Wire *>wire;
-	};
-	
-	class Camera
-	{
-	public:
-		Camera(Vector *eye, Vector *at, Vector *up) {
-			this->eye = eye;
-			this->at = at;
-			this->up = up;
-		};
-		~Camera() {
-			delete eye;
-			delete at;
-			delete up;
-		};
-		void lookup(const Vector target);
-		void move(const Vector to);
-		
-		/* data */
-		Vector *eye;
-		Vector *at;
-		Vector *up;
-	};
-	
-	class Light
-	{
-	public:
-		Light(Vector *position, double brightness) {
-			this->position = position;
-			this->brightness = brightness;
-		};
-		~Light() {
-			delete position;
-		};
-		
-		/* data */
-		Vector *position;
-		double brightness;
-	};
-	
-	class SpotLight : public Light
-	{
-	public:
-		SpotLight(Vector *position, Vector *direction, double brightness) : Light(position, brightness) {
-			this->direction = direction;
-		};
-		~SpotLight() {
-			delete direction;
-		};
-		
-		/* data */
-		Vector *direction;
-	};
-	
-	class Polygon
-	{
-	public:
-		std::array<Vector *, 3> vertex;
-		int color;
+		std::vector<Polygon *>polygon;
 	};
 }
 
