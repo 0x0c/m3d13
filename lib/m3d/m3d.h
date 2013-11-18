@@ -6,8 +6,7 @@
 //  Copyright (c) 2013年 Akira Matsuda. All rights reserved.
 //
 
-#ifndef __m3d__
-#define __m3d__
+#pragma once
 
 #include <string>
 #include <vector>
@@ -213,14 +212,14 @@ namespace m3d
 		Object* transform(const std::array<double, 16> m);
 		static Object* cube(std::string name) {
 			Object *cube = new Object({
-				new Vector(-1, -1, -1),//0
-				new Vector( 1, -1, -1),//1
-				new Vector( 1,  1, -1),//2
-				new Vector(-1,  1, -1),//3
-				new Vector(-1, -1,  1),//4
-				new Vector( 1, -1,  1),//5
-				new Vector( 1,  1,  1),//6
-				new Vector(-1,  1,  1)//7
+				new Vector(-1, -1, -1),
+				new Vector( 1, -1, -1),
+				new Vector( 1,  1, -1),
+				new Vector(-1,  1, -1),
+				new Vector(-1, -1,  1),
+				new Vector( 1, -1,  1),
+				new Vector( 1,  1,  1),
+				new Vector(-1,  1,  1)
 			}, {
 				new Wire(0, 1),
 				new Wire(1, 2),
@@ -263,5 +262,3 @@ namespace m3d
 		std::vector<Polygon *>polygon;
 	};
 }
-
-#endif

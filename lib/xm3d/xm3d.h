@@ -6,8 +6,7 @@
 //  Copyright (c) 2013年 Akira Matsuda. All rights reserved.
 //
 
-#ifndef __m3d__xm3d__
-#define __m3d__xm3d__
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -88,5 +87,3 @@ public:
 	void run();
 	void add_obj(Object *object);
 };
-
-#endif /* defined(__m3d__xm3d__) */
