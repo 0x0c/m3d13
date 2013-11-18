@@ -1,6 +1,6 @@
 m3d13
 ===
-[m3d](https://github.com/0x0c/m3d) using c++11.
+m3d13 is a tiny 3DCG library using c++11.
 
 ![](https://raw.github.com/0x0c/m3d13/master/sample.png)
 
