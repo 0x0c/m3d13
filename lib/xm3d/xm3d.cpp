@@ -23,10 +23,13 @@ vector<Polygon *> xm3d::_z_sort()
 		vector<Polygon *>::iterator it_p = object->polygon.begin();
 		for (it_p = object->polygon.begin(); it_p != object->polygon.end(); ++it_p) {
 			Polygon *p = (Polygon *)*it_p;
+			Vector v1(*p->vertex[0] - *camera_->eye);
+			Vector v2(*p->vertex[1] - *camera_->eye);
+			Vector v3(*p->vertex[2] - *camera_->eye);
 			double position = Vector(
-				(Vector(*p->vertex[0]).multiply(m_)->x + Vector(*p->vertex[1]).multiply(m_)->x + Vector(*p->vertex[2]).multiply(m_)->x) / 3,
-				(Vector(*p->vertex[0]).multiply(m_)->y + Vector(*p->vertex[1]).multiply(m_)->y + Vector(*p->vertex[2]).multiply(m_)->y) / 3,
-				(Vector(*p->vertex[0]).multiply(m_)->z + Vector(*p->vertex[1]).multiply(m_)->z + Vector(*p->vertex[2]).multiply(m_)->z) / 3
+				(v1.x + v2.x + v3.x) / 3,
+				(v1.y + v2.y + v3.y) / 3,
+				(v1.z + v2.z + v3.z) / 3
 			).size();
 			order[position] = p;
 		}
@@ -36,9 +39,7 @@ vector<Polygon *> xm3d::_z_sort()
 	for (it_m = order.begin(); it_m != order.end(); ++it_m) {
 		result.push_back((*it_m).second);
 	}
-	
-	reverse(result.begin(), result.end());
-	
+		
 	return result;
 }
 
