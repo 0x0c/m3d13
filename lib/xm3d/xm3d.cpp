@@ -17,20 +17,18 @@ vector<Polygon *> xm3d::_z_sort()
 	map<double, Polygon *> order;
 	vector<Polygon *> result;
 	
+	//TODO:zソートがうまくいっていないバグを治す
 	vector<Object *>::iterator it_b = this->objects_->begin();
 	for (it_b = this->objects_->begin(); it_b != this->objects_->end(); ++it_b) {
 		Object *object = (Object *)*it_b;
 		vector<Polygon *>::iterator it_p = object->polygon.begin();
 		for (it_p = object->polygon.begin(); it_p != object->polygon.end(); ++it_p) {
 			Polygon *p = (Polygon *)*it_p;
-			Vector v1(*p->vertex[0] - *camera_->eye);
-			Vector v2(*p->vertex[1] - *camera_->eye);
-			Vector v3(*p->vertex[2] - *camera_->eye);
-			double position = Vector(
-				(v1.x + v2.x + v3.x) / 3,
-				(v1.y + v2.y + v3.y) / 3,
-				(v1.z + v2.z + v3.z) / 3
-			).size();
+			double position = (Vector(
+				(p->vertex[0]->x + p->vertex[1]->x + p->vertex[2]->x) / 3,
+				(p->vertex[0]->y + p->vertex[1]->y + p->vertex[2]->y) / 3,
+				(p->vertex[0]->z + p->vertex[1]->z + p->vertex[2]->z) / 3
+			) - *camera_->eye).size();
 			order[position] = p;
 		}
 	}
@@ -39,6 +37,8 @@ vector<Polygon *> xm3d::_z_sort()
 	for (it_m = order.begin(); it_m != order.end(); ++it_m) {
 		result.push_back((*it_m).second);
 	}
+	
+	reverse(result.begin(), result.end());
 		
 	return result;
 }
@@ -75,10 +75,12 @@ void xm3d::_draw()
 		vector<Wire *>::iterator it_w = object->wire.begin();
 		for (it_w = object->wire.begin(); it_w != object->wire.end(); ++it_w) {
 			Wire *w = (Wire *)*it_w;
-			Vector *v1 = Vector(*object->vertex[w->a]).multiply(m_);
-			Vector *v2 = Vector(*object->vertex[w->b]).multiply(m_);
+			Vector v1(*object->vertex[w->a]);
+			v1.multiply(m_);
+			Vector v2(*object->vertex[w->b]);
+			v2.multiply(m_);
 
-			XDrawLine(display_, pix_map_, graphic_context_, v1->x, v1->y, v2->x, v2->y);
+			XDrawLine(display_, pix_map_, graphic_context_, v1.x, v1.y, v2.x, v2.y);
 		}
 
 		i = 0;
@@ -87,27 +89,30 @@ void xm3d::_draw()
 			Polygon *p = (Polygon *)*it_p;
 			XSetForeground(display_, graphic_context_, p->color);
 			
-			Vector *v1 = Vector(*p->vertex[0]).multiply(m_);
-			Vector *v2 = Vector(*p->vertex[1]).multiply(m_);
-			Vector *v3 = Vector(*p->vertex[2]).multiply(m_);
+			Vector v1(*p->vertex[0]);
+			v1.multiply(m_);
+			Vector v2(*p->vertex[1]);
+			v2.multiply(m_);
+			Vector v3(*p->vertex[2]);
+			v3.multiply(m_);
 			
 			XPoint point[3] = {
-				(XPoint){static_cast<short>(v1->x), static_cast<short>(v1->y)},
-				(XPoint){static_cast<short>(v2->x), static_cast<short>(v2->y)},
-				(XPoint){static_cast<short>(v3->x), static_cast<short>(v3->y)}
+				(XPoint){static_cast<short>(v1.x), static_cast<short>(v1.y)},
+				(XPoint){static_cast<short>(v2.x), static_cast<short>(v2.y)},
+				(XPoint){static_cast<short>(v3.x), static_cast<short>(v3.y)}
 			};
 			XFillPolygon(display_, pix_map_, graphic_context_, point, 3, Convex, CoordModeOrigin);
 			if (debug_mode) {
 				XSetForeground(display_, graphic_context_, vertex_color);
 				std::ostringstream stream;
 				stream << i++;
-				XDrawString(display_, pix_map_, graphic_context_, v1->x - 5 / 2, v1->y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
+				XDrawString(display_, pix_map_, graphic_context_, v1.x - 5 / 2, v1.y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
 				stream.str("");
 				stream << i++;
-				XDrawString(display_, pix_map_, graphic_context_, v2->x - 5 / 2, v2->y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
+				XDrawString(display_, pix_map_, graphic_context_, v2.x - 5 / 2, v2.y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
 				stream.str("");
 				stream << i++;
-				XDrawString(display_, pix_map_, graphic_context_, v3->x - 5 / 2, v3->y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
+				XDrawString(display_, pix_map_, graphic_context_, v3.x - 5 / 2, v3.y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
 			}
 		}
 	}
@@ -145,9 +150,11 @@ void xm3d::_draw_axis()
 		vector<Wire *>::iterator it_w = object->wire.begin();
 		for (it_w = object->wire.begin(); it_w != object->wire.end(); ++it_w) {
 			Wire *w = (Wire *)*it_w;
-			Vector *v1 = Vector(*object->vertex[w->a]).multiply(m_);
-			Vector *v2 = Vector(*object->vertex[w->b]).multiply(m_);
-			XDrawLine(display_, pix_map_, graphic_context_, v1->x, v1->y, v2->x, v2->y);
+			Vector v1(*object->vertex[w->a]);
+			v1.multiply(m_);
+			Vector v2(*object->vertex[w->b]);
+			v2.multiply(m_);
+			XDrawLine(display_, pix_map_, graphic_context_, v1.x, v1.y, v2.x, v2.y);
 		}
 		color >>= 8;
 	}
@@ -193,7 +200,7 @@ void xm3d::run()
 			XCopyArea(display_, pix_map_, window_, graphic_context_, 0, 0, width_, height_, 0, 0);
 			XSetForeground(display_, graphic_context_, black_);
 			std::ostringstream stream;
-			stream << "m3d version:" << m3d::version;
+			stream << "m3d13 version:" << m3d::version;
 			XDrawString(display_, window_, graphic_context_, 10, width_ - 10, stream.str().c_str(), (int)stream.str().length());
 			usleep(1.0 / fps * 1000000);
 		}
