@@ -56,7 +56,7 @@ public:
 
 		window_ = XCreateSimpleWindow(display_, DefaultRootWindow(display_), 100, 100, width_, height_, border_, black_, white_);
 		quit_ = XCreateSimpleWindow(display_, window_, 10, 3, 30, 12, 1, black_, white_);
-		graphic_context_ = XCreateGC(display_, window_, 0, NULL);//set graphic context.
+		graphic_context_ = XCreateGC(display_, window_, 0, NULL);
 		pix_map_ = XCreatePixmap(display_, root_, width_, height_, DefaultDepth(display_, screen_));
 
 		XStoreName(display_, window_, name.c_str());
@@ -81,7 +81,7 @@ public:
 	void run();
 	void add_obj(Object *object);
 	
-	unsigned int fps = 60;
+	unsigned int fps = 30;
 	bool debug_mode = false;
 	bool suspend = false;
 	bool draw_axis = false;
