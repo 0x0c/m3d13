@@ -20,18 +20,77 @@ int main(int argc, const char * argv[])
 	cout << "Hello, World!" << endl;
 
 	auto cube = Object::cube("cube");
-	auto pyramid = Object::pyramid3("pyramid");
-	
 	cube->transform(Matrix::scale(10, 10, 10));
-	pyramid->transform(Matrix::scale(3, 3, 3));
 	
-	auto view = new xm3d(800, 800, "xm3d", [=](unsigned int life, XEvent e, Window window) {
+	auto polygon = new Object({
+		new Polygon({
+			new Vector( 1,  1, -1),
+			new Vector(-1,  1, -1),
+			new Vector( 1,  1,  1)
+		}, 0x0000ff),
+		new Polygon({
+			new Vector(-1,  1, -1),
+			new Vector( 1,  1,  1),
+			new Vector(-1,  1,  1)
+		}, 0x00ff00),
+		new Polygon({
+			new Vector( 1, -1, -1),
+			new Vector( 1,  1, -1),
+			new Vector( 1,  1,  1)
+		}, 0xff0000),
+		new Polygon({
+			new Vector( 1, -1, -1),
+			new Vector( 1, -1,  1),
+			new Vector( 1,  1,  1)
+		}, 0x0000ff),
+		new Polygon({
+			new Vector(-1, -1,  1),
+			new Vector( 1, -1,  1),
+			new Vector( 1,  1,  1),
+		}, 0x00ff00),
+		new Polygon({
+			new Vector(-1, -1,  1),
+			new Vector( 1,  1,  1),
+			new Vector(-1,  1,  1)
+		}, 0xff0000),		
+		new Polygon({
+			new Vector(-1, -1, -1),
+			new Vector( 1, -1, -1),
+			new Vector( 1,  1, -1)
+		}, 0x0000ff),
+		new Polygon({
+			new Vector(-1, -1, -1),
+			new Vector( 1,  1, -1),
+			new Vector(-1,  1, -1)
+		}, 0x00ff00),
+		new Polygon({
+			new Vector(-1, -1, -1),
+			new Vector(-1, -1,  1),
+			new Vector(-1,  1,  1)
+		}, 0xff0000),
+		new Polygon({
+			new Vector(-1, -1, -1),
+			new Vector(-1, -1,  1),
+			new Vector(-1,  1,  1)
+		}, 0x0000ff),
+		new Polygon({
+			new Vector(-1, -1, -1),
+			new Vector( 1, -1, -1),
+			new Vector( 1, -1,  1)
+		}, 0x00ff00),
+		new Polygon({
+			new Vector(-1, -1, -1),
+			new Vector(-1, -1,  1),
+			new Vector( 1, -1,  1)
+		}, 0xff0000)
+	}, "polygon");
+	polygon->transform(Matrix::scale(10, 10, 10));
+	auto view = new xm3d(1500, 1500, "xm3d", [=](unsigned int life, XEvent e, Window window) {
 		cube->transform(Matrix::rotate(m3d_axis_y, 0.3));
-		pyramid->transform(Matrix::rotate(m3d_axis_y, 0.3));
+		polygon->transform(Matrix::rotate(m3d_axis_y, 0.3));
 	});
-	view->add_obj(cube);
-	view->add_obj(pyramid);
+	view->add_obj(polygon);
 	view->run();
-	
+
 	return 0;
 }
