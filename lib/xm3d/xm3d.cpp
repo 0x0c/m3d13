@@ -182,9 +182,9 @@ void xm3d::run()
 			}
 		}
 		else {
-#ifdef __M3D__DEBUG__
-			cout << "--draw!(" << life_ << ")--" << endl;
-#endif
+			if (debug_mode) {
+				cout << "--draw!(" << life_ << ")--" << endl;
+			}
 			XDrawString(display_, quit_, graphic_context_, 4, 10, "QUIT", 4);
 			XSetForeground(display_, graphic_context_, white_);
 			XFillRectangle(display_, pix_map_, graphic_context_, 0, 0, width_, height_);
