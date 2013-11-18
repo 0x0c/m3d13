@@ -90,6 +90,8 @@ int main(int argc, const char * argv[])
 		polygon->transform(Matrix::rotate(m3d_axis_y, 0.3));
 	});
 	view->add_obj(polygon);
+	view->add_obj(cube);
+
 	view->run();
 
 	return 0;
