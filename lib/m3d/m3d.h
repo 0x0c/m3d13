@@ -155,6 +155,35 @@ namespace m3d
 		double operator*(const Vector& v) {
 			return this->x * v.x + this->y * v.y + this->z * v.z;
 		};
+		Vector operator*(const Matrix& m) {
+			Vector tmp(*this);
+			double x = this->x;
+			double y = this->y;
+			double z = this->z;
+			double w = this->w;
+			tmp.x = m.m[ 0] * x + m.m[ 4] * y + m.m[ 8] * z + m.m[12] * w;
+			tmp.y = m.m[ 1] * x + m.m[ 5] * y + m.m[ 9] * z + m.m[13] * w;
+			tmp.z = m.m[ 2] * x + m.m[ 6] * y + m.m[10] * z + m.m[14] * w;
+			tmp.w = m.m[ 3] * x + m.m[ 7] * y + m.m[11] * z + m.m[15] * w;
+			
+			this->scale(1 / this->w);
+			
+			return tmp;
+		};
+		Vector& operator*=(const Matrix& m) {
+			double x = this->x;
+			double y = this->y;
+			double z = this->z;
+			double w = this->w;
+			this->x = m.m[ 0] * x + m.m[ 4] * y + m.m[ 8] * z + m.m[12] * w;
+			this->y = m.m[ 1] * x + m.m[ 5] * y + m.m[ 9] * z + m.m[13] * w;
+			this->z = m.m[ 2] * x + m.m[ 6] * y + m.m[10] * z + m.m[14] * w;
+			this->w = m.m[ 3] * x + m.m[ 7] * y + m.m[11] * z + m.m[15] * w;
+			
+			this->scale(1 / this->w);
+			
+			return *this;
+		};
 		Vector operator&(const Vector& v) {
 			Vector tmp(*this);
 			double x = tmp.x;
