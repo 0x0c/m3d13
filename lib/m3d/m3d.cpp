@@ -13,7 +13,7 @@ using namespace m3d;
 
 #pragma mark - Matrix
 
-Matrix* Matrix::multiply(const Matrix *m)
+Matrix* Matrix::_multiply(const Matrix *m)
 {
 	Matrix a(*this);
 	for(int i = 0; i < 4; i++) {
@@ -29,30 +29,22 @@ Matrix* Matrix::multiply(const Matrix *m)
 	return this;
 }
 
-Matrix* Matrix::create_matrix_multiply(const Matrix *m)
-{
-	Matrix *result = new Matrix(*this);
-	result->multiply(m);
-	
-	return result;
-}
-
 Matrix* Matrix::view(const Camera *camera)
 {
-	Vector *a = Vector(*camera->eye).sub(camera->at);
-	Vector *z = Vector(*a).normalize();
+	Vector a = *camera->eye - *camera->at;
+	Vector *z = Vector(a).normalize();
 	Vector *b = Vector(*camera->up).cross(z);
 	Vector *x = Vector(*b).normalize();
 	Vector *y = Vector(*z).cross(x);
 	double qx = camera->eye->dot(x);
 	double qy = camera->eye->dot(y);
 	double qz = camera->eye->dot(z);
-	this->multiply(new Matrix({
+	*this *= Matrix({
 		x->x, y->x, z->x, 0,
 		x->y, y->y, z->y, 0,
 		x->z, y->z, z->z, 0,
-		 -qx,  -qy,  -qz, 1
-	}));
+		-qx,  -qy,  -qz, 1
+	});
 	
 	return this;
 }
@@ -62,12 +54,12 @@ Matrix* Matrix::projection(const double angle, const double aspect, const double
 	double sy = cos(angle * 0.5) / sin(angle * 0.5);
 	double sx =  sy / aspect;
 	double sz = far / (far - near);
-	this->multiply(new Matrix({
+	*this *= Matrix({
  		sx			,0			,0			,0,
  		0			,sy			,0			,0,
  		0			,0			,sz			,1,
  		0			,0			,-sz * near	,0
-	}));
+	});
 	
 	return this;
 }
@@ -78,37 +70,17 @@ Matrix* Matrix::screen(const double x, const double y)
  	w = x * 0.5;
  	h = y * 0.5;
 
-	this->multiply(new Matrix({
+	*this *= Matrix({
  		w	,0	,0	,0,
  		0	,h	,0	,0,
  		0	,0	,1	,0,
  		w	,h	,0	,1
- 	}));
+ 	});
 	
 	return this;
 }
 
 #pragma mark - Vector
-
-Vector* Vector::add(const Vector *v)
-{
-	this->x += v->x;
-	this->y += v->y;
-	this->z += v->z;
-	this->w = 1;
-	
-	return this;
-}
-
-Vector* Vector::sub(const Vector *v)
-{
-	this->x -= v->x;
-	this->y -= v->y;
-	this->z -= v->y;
-	this->w = 1;
-	
-	return this;
-}
 
 double Vector::dot(const Vector *v)
 {

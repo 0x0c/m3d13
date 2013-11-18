@@ -32,8 +32,17 @@ namespace m3d
 		Matrix(const std::array<double, 16> m) {
 			this->m = m;
 		};
-		Matrix* multiply(const Matrix *m);
-		Matrix* create_matrix_multiply(const Matrix *m);
+		Matrix operator*(const Matrix& m) {
+			Matrix tmp(*this);
+			tmp._multiply(&m);
+			
+			return tmp;
+		};
+		Matrix& operator*=(const Matrix& m) {
+			this->_multiply(&m);
+			
+			return *this;
+		};
 		Matrix* view(const Camera *camera);
 		Matrix* projection(const double angle, const double aspect, const double near, const double far);
 		Matrix* screen(const double x, const double y);
@@ -100,6 +109,8 @@ namespace m3d
 		
 		/* data */
 		std::array<double, 16> m;
+	private:
+		Matrix* _multiply(const Matrix *m);
 	};
 	
 	class Vector
@@ -111,8 +122,36 @@ namespace m3d
 			this->z = z;
 			this->w = 1;
 		};
-		Vector* add(const Vector *v);
-		Vector* sub(const Vector *v);
+		Vector operator+(const Vector& v) {
+			Vector tmp(*this);
+			tmp.x += v.x;
+			tmp.y += v.y;
+			tmp.z += v.z;
+			
+			return tmp;
+		};
+		Vector& operator+=(const Vector& v) {
+			x += v.x;
+			y += v.x;
+			z += v.x;
+			
+			return *this;
+		};
+		Vector operator-(const Vector& v) {
+			Vector tmp(*this);
+			tmp.x -= v.x;
+			tmp.y -= v.y;
+			tmp.z -= v.z;
+			
+			return tmp;
+		};
+		Vector& operator-=(const Vector& v) {
+			x -= v.x;
+			y -= v.x;
+			z -= v.x;
+			
+			return *this;
+		};
 		double dot(const Vector *v);
 		Vector* cross(const Vector *v);
 		Vector* normalize();
