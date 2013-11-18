@@ -29,16 +29,16 @@ Matrix* Matrix::_multiply(const Matrix *m)
 	return this;
 }
 
-Matrix* Matrix::view(const Camera *camera)
+Matrix* Matrix::view(const Camera camera)
 {
-	Vector a = *camera->eye - *camera->at;
+	Vector a = *camera.eye - *camera.at;
 	Vector z = Vector(a).normalize();
-	Vector b = *camera->up & z;
+	Vector b = *camera.up & z;
 	Vector x = Vector(b).normalize();
 	Vector y = z & x;
-	double qx = *camera->eye * x;
-	double qy = *camera->eye * y;
-	double qz = *camera->eye * z;
+	double qx = *camera.eye * x;
+	double qy = *camera.eye * y;
+	double qz = *camera.eye * z;
 	*this *= Matrix({
 		x.x, y.x, z.x, 0,
 		x.y, y.y, z.y, 0,

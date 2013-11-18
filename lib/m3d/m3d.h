@@ -43,7 +43,7 @@ namespace m3d
 			
 			return *this;
 		};
-		Matrix* view(const Camera *camera);
+		Matrix* view(const Camera camera);
 		Matrix* projection(const double angle, const double aspect, const double near, const double far);
 		Matrix* screen(const double x, const double y);
 		
