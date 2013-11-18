@@ -152,9 +152,33 @@ namespace m3d
 			
 			return *this;
 		};
-		double dot(const Vector *v);
-		Vector* cross(const Vector *v);
-		Vector* normalize();
+		double operator*(const Vector& v) {
+			return this->x * v.x + this->y * v.y + this->z * v.z;
+		};
+		Vector operator&(const Vector& v) {
+			Vector tmp(*this);
+			double x = tmp.x;
+			double y = tmp.y;
+			double z = tmp.z;
+			tmp.x = y * v.z - z * v.y;
+			tmp.y = z * v.x - x * v.z;
+			tmp.z = x * v.y - y * v.x;
+			tmp.w = 1;
+		
+			return tmp;
+		};
+		Vector& operator&=(const Vector& v) {
+			double x = this->x;
+			double y = this->y;
+			double z = this->z;
+			this->x = y * v.z - z * v.y;
+			this->y = z * v.x - x * v.z;
+			this->z = x * v.y - y * v.x;
+			this->w = 1;
+			
+			return *this;
+		};
+		Vector normalize();
 		double size();
 		Vector* scale(const double k);
 		Vector* multiply(const Matrix *m);

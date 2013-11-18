@@ -32,18 +32,18 @@ Matrix* Matrix::_multiply(const Matrix *m)
 Matrix* Matrix::view(const Camera *camera)
 {
 	Vector a = *camera->eye - *camera->at;
-	Vector *z = Vector(a).normalize();
-	Vector *b = Vector(*camera->up).cross(z);
-	Vector *x = Vector(*b).normalize();
-	Vector *y = Vector(*z).cross(x);
-	double qx = camera->eye->dot(x);
-	double qy = camera->eye->dot(y);
-	double qz = camera->eye->dot(z);
+	Vector z = Vector(a).normalize();
+	Vector b = *camera->up & z;
+	Vector x = Vector(b).normalize();
+	Vector y = z & x;
+	double qx = *camera->eye * x;
+	double qy = *camera->eye * y;
+	double qz = *camera->eye * z;
 	*this *= Matrix({
-		x->x, y->x, z->x, 0,
-		x->y, y->y, z->y, 0,
-		x->z, y->z, z->z, 0,
-		-qx,  -qy,  -qz, 1
+		x.x, y.x, z.x, 0,
+		x.y, y.y, z.y, 0,
+		x.z, y.z, z.z, 0,
+		-qx, -qy, -qz, 1
 	});
 	
 	return this;
@@ -82,25 +82,7 @@ Matrix* Matrix::screen(const double x, const double y)
 
 #pragma mark - Vector
 
-double Vector::dot(const Vector *v)
-{
-	return this->x * v->x + this->y * v->y + this->z * v->z;
-}
-
-Vector* Vector::cross(const Vector *v)
-{
-	double x = this->x;
-	double y = this->y;
-	double z = this->z;
-	this->x = y * v->z - z * v->y;
-	this->y = z * v->x - x * v->z;
-	this->z = x * v->y - y * v->x;
-	this->w = 1;
-	
-	return this;
-}
-
-Vector* Vector::normalize()
+Vector Vector::normalize()
 {
 	double size = this->size();
 	this->x /= size;
@@ -108,7 +90,7 @@ Vector* Vector::normalize()
 	this->z /= size;
 	this->w = 1;
 	
-	return this;
+	return *this;
 }
 
 double Vector::size()
@@ -146,6 +128,7 @@ Vector* Vector::multiply(const Matrix *m)
 
 int Polygon::real_color(Light *light)
 {
+	//TODO:ちゃんと実装する
 	return 0;
 }
 
