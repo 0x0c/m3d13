@@ -21,9 +21,9 @@ namespace m3d
 	static std::string version = "1.0";
 	
 	typedef enum {
-		m3d_axis_x = 0,
-		m3d_axis_y,
-		m3d_axis_z
+		m3d_axis_x = 1 << 0,
+		m3d_axis_y = 1 << 1,
+		m3d_axis_z = 1 << 2
 	} m3d_axis;
 	
 	class Camera;
@@ -166,8 +166,9 @@ namespace m3d
 	class Light
 	{
 	public:
-		Light(Vector *position, double brightness) {
+		Light(Vector *position, Vector *direction, double brightness) {
 			this->position = position;
+			this->direction = direction;
 			this->brightness = brightness;
 		};
 		~Light() {
@@ -176,26 +177,18 @@ namespace m3d
 		
 		/* data */
 		Vector *position;
-		double brightness;
-	};
-	
-	class DirectionalLight : public Light
-	{
-	public:
-		DirectionalLight(Vector *position, Vector *direction, double brightness) : Light(position, brightness) {
-			this->direction = direction;
-		};
-		~DirectionalLight() {
-			delete direction;
-		};
-		
-		/* data */
 		Vector *direction;
+		double brightness;
 	};
 	
 	class Polygon
 	{
 	public:
+		Polygon(std::array<Vector *, 3> vertex, int color) {
+			this->vertex = vertex;
+			this->color = color;
+		};
+		~Polygon();
 		int real_color(Light *light);
 		
 		/* data */
@@ -220,14 +213,14 @@ namespace m3d
 		Object* transform(const std::array<double, 16> m);
 		static Object* cube(std::string name) {
 			Object *cube = new Object({
-				new Vector(-1, -1, -1),
-				new Vector( 1, -1, -1),
-				new Vector( 1,  1, -1),
-				new Vector(-1,  1, -1),
-				new Vector(-1, -1,  1),
-				new Vector( 1, -1,  1),
-				new Vector( 1,  1,  1),
-				new Vector(-1,  1,  1)
+				new Vector(-1, -1, -1),//0
+				new Vector( 1, -1, -1),//1
+				new Vector( 1,  1, -1),//2
+				new Vector(-1,  1, -1),//3
+				new Vector(-1, -1,  1),//4
+				new Vector( 1, -1,  1),//5
+				new Vector( 1,  1,  1),//6
+				new Vector(-1,  1,  1)//7
 			}, {
 				new Wire(0, 1),
 				new Wire(1, 2),

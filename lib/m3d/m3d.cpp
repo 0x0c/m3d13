@@ -170,19 +170,26 @@ Vector* Vector::multiply(const Matrix *m)
 	return this;
 }
 
+#pragma mark - Polygon
+
+int Polygon::real_color(Light *light)
+{
+	return 0;
+}
+
 #pragma mark - Object
 
 Object* Object::transform(const Matrix *m)
 {
-//	vector<Polygon *>::iterator it_p = this->polygon.begin();
-//	for (it_p = this->polygon.begin(); it_p != this->polygon.end(); ++it_p) {
-//		Polygon *p = (Polygon *)*it_p;
-//		array<Vector *, 3>::iterator it_a = p->vertex.begin();
-//		for (it_a = p->vertex.begin(); it_a != p->vertex.end(); ++it_a) {
-//			Vector *v = (Vector *)*it_a;
-//			v->multiply(m);
-//		}
-//	}
+	vector<Polygon *>::iterator it_p = this->polygon.begin();
+	for (it_p = this->polygon.begin(); it_p != this->polygon.end(); ++it_p) {
+		Polygon *p = (Polygon *)*it_p;
+		array<Vector *, 3>::iterator it_a = p->vertex.begin();
+		for (it_a = p->vertex.begin(); it_a != p->vertex.end(); ++it_a) {
+			Vector *v = (Vector *)*it_a;
+			v->multiply(m);
+		}
+	}
 	
 	vector<Vector *>::iterator it_v = this->vertex.begin();
 	for (it_v = this->vertex.begin(); it_v != this->vertex.end(); ++it_v) {
@@ -196,6 +203,5 @@ Object* Object::transform(const Matrix *m)
 Object* Object::transform(const std::array<double, 16> m)
 {
 	Matrix t(m);
-	
 	return this->transform(&t);
 }
