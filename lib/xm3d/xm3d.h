@@ -17,14 +17,15 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xlocale.h>
-#include "m3d.h"
 
 using namespace std;
 using namespace m3d;
 
 class xm3d {
 private:
-	void draw();
+	vector<Polygon *> _z_sort();
+	void _draw();
+	void _draw_axis();
 
 	Display *display_;
 	Window window_;
@@ -45,7 +46,9 @@ private:
 	std::function<void(unsigned int life, XEvent e, Window window)> event_callback_;
 public:
 	unsigned int fps = 60;
+	bool debug_mode = false;
 	bool suspend = false;
+	bool draw_axis = false;
 	unsigned int line_color = 0x1e90ff;
 	unsigned int vertex_color = 0xff00ff;
 	xm3d(const unsigned int width, const unsigned int height, const std::string name, std::function<void(unsigned int life, XEvent e, Window window)> event_callback) {
@@ -70,7 +73,7 @@ public:
 		XMapSubwindows(display_, window_);
 
 		objects_ = new vector<Object *>;
-		camera_ = new Camera(new Vector(0, 0, 80), new Vector(0, 0, 0), new Vector(0, 1, 0));
+		camera_ = new Camera(new Vector(30, 40, 50), new Vector(0, 0, 0), new Vector(0, 1, 0));
 		m_ = new Matrix(Matrix::identity());
 		m_->view(camera_)->projection(m3d_rad(30), (double)width_ / (double)height_, 100.0, 1000.0)->screen(width_, height_);
 		event_callback_ = event_callback;
@@ -82,7 +85,6 @@ public:
 		XCloseDisplay(display_);
 		delete objects_;
 	};
-
 	void run();
 	void add_obj(Object *object);
 };
