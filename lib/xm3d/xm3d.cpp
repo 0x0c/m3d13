@@ -125,19 +125,19 @@ void xm3d::_draw_axis()
 	vector<Object *>axis = {
 		new Object({
 			new Vector(100, 0, 0),
-			new Vector(-100, 0, 0)
+			new Vector(0, 0, 0)
 		}, {
 			new Wire(0, 1)
 		}, "x_axis"),
 		new Object({
 			new Vector(0, 100, 0),
-			new Vector(0, -100, 0)
+			new Vector(0, 0, 0)
 		}, {
 			new Wire(0, 1)
 		}, "y_axis"),
 		new Object({
 			new Vector(0, 0, 100),
-			new Vector(0, 0, -100)
+			new Vector(0, 0, 0)
 		}, {
 			new Wire(0, 1)
 		}, "z_axis")

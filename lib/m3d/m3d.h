@@ -235,10 +235,10 @@ namespace m3d
 	class Camera
 	{
 	public:
-		Camera(Vector *eye, Vector *at, Vector *up) {
-			this->eye = eye;
-			this->at = at;
-			this->up = up;
+		Camera(Vector eye, Vector at, Vector up) {
+			this->eye = new Vector(eye);
+			this->at = new Vector(at);
+			this->up = new Vector(up);
 		};
 		~Camera() {
 			delete eye;
