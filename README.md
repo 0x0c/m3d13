@@ -4,7 +4,7 @@ m3d13 is a tiny 3DCG library using c++11.
 
 ![](https://raw.github.com/0x0c/m3d13/master/sample.png)
 
-This is beta version.
+This is a beta version.
 
 ===
 	m3d.{h,cpp}...core library.
