@@ -72,6 +72,8 @@ void xm3d::_draw()
 		vector<Polygon *>::iterator it_p = object->polygon.begin();
 		for (it_p = object->polygon.begin(); it_p != object->polygon.end(); ++it_p) {
 			Polygon *p = (Polygon *)*it_p;
+			//TODO:光源による陰影処理を実装する
+//			XSetForeground(display_, graphic_context_, p->real_color(<#m3d::Light *light#>));
 			XSetForeground(display_, graphic_context_, p->color);
 			
 			Vector v1(*p->vertex[0]);
@@ -170,8 +172,6 @@ void xm3d::run()
 					}
 				}
 					break;
-				default:
-					break;
 			}
 		}
 		else {
@@ -199,7 +199,7 @@ void xm3d::run()
 	}
 }
 
-void xm3d::add_obj(Object *object)
+void xm3d::add_object(Object *object)
 {
 	this->objects_->push_back(object);
 }

@@ -80,7 +80,7 @@ public:
 		delete camera_;
 	};
 	void run();
-	void add_obj(Object *object);
+	void add_object(Object *object);
 	
 	unsigned int fps = 60;
 	bool debug_mode = false;
