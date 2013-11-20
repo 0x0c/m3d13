@@ -44,16 +44,6 @@ int main(int argc, const char * argv[])
 			new Vector( 1,  1,  1)
 		}, 0x0000ff),
 		new Polygon({
-			new Vector(-1, -1,  1),
-			new Vector( 1, -1,  1),
-			new Vector( 1,  1,  1),
-		}, 0x00ff00),
-		new Polygon({
-			new Vector(-1, -1,  1),
-			new Vector( 1,  1,  1),
-			new Vector(-1,  1,  1)
-		}, 0xff0000),		
-		new Polygon({
 			new Vector(-1, -1, -1),
 			new Vector( 1, -1, -1),
 			new Vector( 1,  1, -1)
@@ -64,13 +54,23 @@ int main(int argc, const char * argv[])
 			new Vector(-1,  1, -1)
 		}, 0x00ff00),
 		new Polygon({
+			new Vector(-1, -1,  1),
+			new Vector( 1, -1,  1),
+			new Vector( 1,  1,  1),
+		}, 0x00ff00),
+		new Polygon({
+			new Vector(-1, -1,  1),
+			new Vector( 1,  1,  1),
+			new Vector(-1,  1,  1)
+		}, 0xff0000),
+		new Polygon({
 			new Vector(-1, -1, -1),
 			new Vector(-1, -1,  1),
 			new Vector(-1,  1,  1)
 		}, 0xff0000),
 		new Polygon({
 			new Vector(-1, -1, -1),
-			new Vector(-1, -1,  1),
+			new Vector(-1,  1, -1),
 			new Vector(-1,  1,  1)
 		}, 0x0000ff),
 		new Polygon({
@@ -85,13 +85,14 @@ int main(int argc, const char * argv[])
 		}, 0xff0000)
 	}, "polygon");
 	polygon->transform(Matrix::scale(10, 10, 10));
-	auto view = new xm3d(1500, 1500, "xm3d", [=](unsigned int life, XEvent e, Window window) {
-		cube->transform(Matrix::rotate(m3d_axis_y, 0.3));
-		polygon->transform(Matrix::rotate(m3d_axis_y, 0.3));
+	Camera *camera = new Camera(Vector(0, 50, 100), Vector(0, 0, 0), Vector(0, 1, 0));
+	auto view = new xm3d(1500, 1500, camera, "xm3d", [=](unsigned int life, XEvent e, Window window) {
+		cube->transform(Matrix::rotate(m3d_axis_y, 0.5))->transform(Matrix::rotate(m3d_axis_z, 0.5));
+		polygon->transform(Matrix::rotate(m3d_axis_y, 0.5))->transform(Matrix::rotate(m3d_axis_z, 0.5));
 	});
+	view->debug_mode = true;
 	view->add_obj(polygon);
 	view->add_obj(cube);
-
 	view->run();
 
 	return 0;

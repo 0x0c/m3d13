@@ -22,7 +22,7 @@ using namespace m3d;
 
 class xm3d {
 private:
-	vector<Polygon *> _z_sort();
+	void _z_sort();
 	void _draw();
 	void _draw_axis();
 
@@ -66,7 +66,7 @@ public:
 		XMapSubwindows(display_, window_);
 
 		objects_ = new vector<Object *>;
-		camera_ = camera;
+		camera_ = new Camera(*camera);
 		m_ = new Matrix(Matrix::identity());
 		m_->view(*camera_)->projection(m3d_rad(30), (double)width_ / (double)height_, 100.0, 1000.0)->screen(width_, height_);
 		event_callback_ = event_callback;
@@ -82,7 +82,7 @@ public:
 	void run();
 	void add_obj(Object *object);
 	
-	unsigned int fps = 30;
+	unsigned int fps = 60;
 	bool debug_mode = false;
 	bool suspend = false;
 	bool draw_axis = false;

@@ -95,7 +95,7 @@ Vector Vector::normalize()
 
 double Vector::size()
 {
-	return sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2));
+	return sqrt(pow(this->x, 2.0) + pow(this->y, 2.0) + pow(this->z, 2.0));
 }
 
 Vector* Vector::scale(const double k)
@@ -130,6 +130,27 @@ int Polygon::real_color(Light *light)
 {
 	//TODO:ちゃんと実装する
 	return 0;
+}
+
+Vector Polygon::center()
+{
+	return Vector(
+				  (this->vertex[0]->x + this->vertex[1]->x + this->vertex[2]->x) / 3.0,
+				  (this->vertex[0]->y + this->vertex[1]->y + this->vertex[2]->y) / 3.0,
+				  (this->vertex[0]->z + this->vertex[1]->z + this->vertex[2]->z) / 3.0
+				  );
+}
+
+bool Polygon::far(Polygon p, Vector from)
+{
+	Vector g1 = this->center();
+	Vector r1 = g1 - from;
+	double position1 = r1.size();
+	Vector g2 = p.center();
+	Vector r2 = g2 - from;
+	double position2 = r2.size();
+	printf("%lf > %lf = %d\n", position1, position2, position1 > position2);
+	return position1 >= position2;
 }
 
 #pragma mark - Object

@@ -275,11 +275,15 @@ namespace m3d
 	class Polygon
 	{
 	public:
-		Polygon(std::array<Vector *, 3> vertex, int color) {
+		Polygon(const std::array<Vector *, 3> vertex, const int color) {
 			this->vertex = vertex;
 			this->color = color;
 		};
-		~Polygon();
+		~Polygon() {
+			
+		};
+		bool far(Polygon p, Vector from);
+		Vector center();
 		int real_color(Light *light);
 		
 		/* data */
@@ -302,7 +306,7 @@ namespace m3d
 		~Object();
 		Object* transform(const Matrix *m);
 		Object* transform(const std::array<double, 16> m);
-		static Object* cube(std::string name) {
+		static Object* cube(const std::string name) {
 			Object *cube = new Object({
 				new Vector(-1, -1, -1),
 				new Vector( 1, -1, -1),
@@ -329,7 +333,7 @@ namespace m3d
 			
 			return cube;
 		};
-		static Object* pyramid3(std::string name) {
+		static Object* pyramid3(const std::string name) {
 			Object *pyramid3 = new Object({
 				new Vector(-1, -1, -1),
 				new Vector(-1,  1,  1),

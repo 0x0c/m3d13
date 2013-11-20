@@ -9,38 +9,23 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include <algorithm>
 #include "m3d.h"
 #include "xm3d.h"
 
-vector<Polygon *> xm3d::_z_sort()
+void xm3d::_z_sort()
 {
-	map<double, Polygon *> order;
-	vector<Polygon *> result;
-	
-	//TODO:zソートがうまくいっていないバグを治す
+	printf("sort\n");
+	//TODO:cameraの中の値がバグる
+//	Vector c = camera_->eye;
+	Vector c = Vector(0, 50, 100);
 	vector<Object *>::iterator it_b = this->objects_->begin();
 	for (it_b = this->objects_->begin(); it_b != this->objects_->end(); ++it_b) {
 		Object *object = (Object *)*it_b;
-		vector<Polygon *>::iterator it_p = object->polygon.begin();
-		for (it_p = object->polygon.begin(); it_p != object->polygon.end(); ++it_p) {
-			Polygon *p = (Polygon *)*it_p;
-			double position = (Vector(
-				(p->vertex[0]->x + p->vertex[1]->x + p->vertex[2]->x) / 3,
-				(p->vertex[0]->y + p->vertex[1]->y + p->vertex[2]->y) / 3,
-				(p->vertex[0]->z + p->vertex[1]->z + p->vertex[2]->z) / 3
-			) - *camera_->eye).size();
-			order[position] = p;
-		}
+		sort(object->polygon.begin(), object->polygon.end(), [=](Polygon *a, Polygon *b) {
+			return a->far(*b, c);
+		});
 	}
-	
-	map<double, Polygon *>::iterator it_m = order.begin();
-	for (it_m = order.begin(); it_m != order.end(); ++it_m) {
-		result.push_back((*it_m).second);
-	}
-	
-	reverse(result.begin(), result.end());
-		
-	return result;
 }
 
 void xm3d::_draw()
@@ -84,17 +69,18 @@ void xm3d::_draw()
 		}
 
 		i = 0;
-		vector<Polygon *>::iterator it_p = this->_z_sort().begin();
+		this->_z_sort();
+		vector<Polygon *>::iterator it_p = object->polygon.begin();
 		for (it_p = object->polygon.begin(); it_p != object->polygon.end(); ++it_p) {
 			Polygon *p = (Polygon *)*it_p;
 			XSetForeground(display_, graphic_context_, p->color);
 			
 			Vector v1(*p->vertex[0]);
-			v1.multiply(m_);
+			v1 *= *m_;
 			Vector v2(*p->vertex[1]);
-			v2.multiply(m_);
+			v2 *= *m_;
 			Vector v3(*p->vertex[2]);
-			v3.multiply(m_);
+			v3 *= *m_;
 			
 			XPoint point[3] = {
 				(XPoint){static_cast<short>(v1.x), static_cast<short>(v1.y)},
@@ -102,6 +88,7 @@ void xm3d::_draw()
 				(XPoint){static_cast<short>(v3.x), static_cast<short>(v3.y)}
 			};
 			XFillPolygon(display_, pix_map_, graphic_context_, point, 3, Convex, CoordModeOrigin);
+			
 			if (debug_mode) {
 				XSetForeground(display_, graphic_context_, vertex_color);
 				std::ostringstream stream;
