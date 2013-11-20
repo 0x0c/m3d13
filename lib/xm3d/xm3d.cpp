@@ -15,7 +15,6 @@
 
 void xm3d::_z_sort()
 {
-	printf("sort\n");
 	//TODO:cameraの中の値がバグる
 //	Vector c = camera_->eye;
 	Vector c = Vector(0, 50, 100);
