@@ -143,13 +143,9 @@ Vector Polygon::center()
 
 bool Polygon::far(Polygon p, Vector from)
 {
-	Vector g1 = this->center();
-	Vector r1 = g1 - from;
-	double position1 = r1.size();
-	Vector g2 = p.center();
-	Vector r2 = g2 - from;
-	double position2 = r2.size();
-	printf("%lf > %lf = %d\n", position1, position2, position1 > position2);
+	double position1 = (this->center() - from).size();
+	double position2 = (p.center() - from).size();
+
 	return position1 >= position2;
 }
 
