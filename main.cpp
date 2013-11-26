@@ -19,11 +19,6 @@ int main(int argc, const char * argv[])
 	// insert code here...
 	cout << "Hello, World!" << endl;
 
-//	auto polygon = new Object({new Polygon({
-//		new Vector(-1, -1,  1),
-//		new Vector( 1, -1,  1),
-//		new Vector( 1,  1,  1),
-//	}, 0x0000ff)},"polygon");
 	auto polygon = Object::fill_cube("polygon");
 	polygon->transform(Matrix::scale(10, 10, 10));
 	Camera camera(Vector(0, 50, 100), Vector(0, 0, 0), Vector(0, 1, 0));
