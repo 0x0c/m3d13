@@ -33,6 +33,22 @@ void xm3d::_draw()
 		this->_draw_axis();
 	}
 	
+	if (debug_mode) {
+		XSetForeground(display_, graphic_context_, vertex_color);
+		Vector v1 = Vector(light_.position);
+		Vector v2 = Vector(light_.position);
+		Vector v3 = Vector(light_.at);
+		v1.multiply(m_);
+		v2.multiply(m_);
+		v3.multiply(m_);
+		XPoint point[3] = {
+			(XPoint){static_cast<short>(v1.x - 5), static_cast<short>(v1.y - 5)},
+			(XPoint){static_cast<short>(v2.x + 5), static_cast<short>(v2.y + 5)},
+			(XPoint){static_cast<short>(v3.x), static_cast<short>(v3.y)}
+		};
+		XFillPolygon(display_, pix_map_, graphic_context_, point, 3, Convex, CoordModeOrigin);
+	}
+	
 	vector<Object *>::iterator it_b = this->objects_->begin();
 	for (it_b = this->objects_->begin(); it_b != this->objects_->end(); ++it_b) {
 		Object *object = (Object *)*it_b;

@@ -132,7 +132,7 @@ unsigned long Polygon::real_color(Light light)
 	Vector direction = light.at - light.position;
 	double brightness = (this->normal_vector() * direction.normalize()) * light.brightness * -1;
 	brightness = brightness < 0 ? 0 : brightness;
-	unsigned long real_color = ((this->color & 0xff0000) * brightness) + ((this->color & 0x00ff00) * brightness) + ((this->color & 0x0000ff) * brightness);
+	unsigned long real_color = ((unsigned long)((this->color & 0xff0000) * brightness) & 0xff0000) + ((unsigned long)((this->color & 0x00ff00) * brightness) & 0x00ff00) + ((unsigned long)((this->color & 0x0000ff) * brightness) & 0x0000ff);
 	
 	return 0 < real_color ? real_color : 0;
 }

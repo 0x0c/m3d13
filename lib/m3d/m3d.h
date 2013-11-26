@@ -386,12 +386,12 @@ namespace m3d
 					new Vector( 1,  1,  1),
 					new Vector(-1,  1, -1),
 					new Vector(-1,  1,  1)
-				}, 0x0000ff),
+				}, 0x00ff00),
 				new Polygon({
 					new Vector( 1, -1, -1),
 					new Vector( 1,  1, -1),
 					new Vector( 1,  1,  1)
-				}, 0x0000ff),
+				}, 0xff0000),
 				new Polygon({
 					new Vector( 1, -1,  1),
 					new Vector( 1, -1, -1),
