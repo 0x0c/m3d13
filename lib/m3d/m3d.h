@@ -375,68 +375,68 @@ namespace m3d
 			
 			return pyramid3;
 		};
-		static Object* fill_cube(const std::string name) {
+		static Object* fill_cube(const std::string name, unsigned long color) {
 			Object *fill_cube = new Object({
 				new Polygon({
 					new Vector( 1,  1, -1),
 					new Vector(-1,  1, -1),
 					new Vector( 1,  1,  1)
-				}, 0x0000ff),
+				}, color),
 				new Polygon({
 					new Vector( 1,  1,  1),
 					new Vector(-1,  1, -1),
 					new Vector(-1,  1,  1)
-				}, 0x00ff00),
+				}, color),
 				new Polygon({
 					new Vector( 1, -1, -1),
 					new Vector( 1,  1, -1),
 					new Vector( 1,  1,  1)
-				}, 0xff0000),
+				}, color),
 				new Polygon({
 					new Vector( 1, -1,  1),
 					new Vector( 1, -1, -1),
 					new Vector( 1,  1,  1)
-				}, 0x0000ff),
+				}, color),
 				new Polygon({
 					new Vector( 1, -1, -1),
 					new Vector(-1, -1, -1),
 					new Vector( 1,  1, -1)
-				}, 0x0000ff),
+				}, color),
 				new Polygon({
 					new Vector( 1,  1, -1),
 					new Vector(-1, -1, -1),
 					new Vector(-1,  1, -1)
-				}, 0x0000ff),
+				}, color),
 				new Polygon({
 					new Vector(-1, -1,  1),
 					new Vector( 1, -1,  1),
 					new Vector( 1,  1,  1),
-				}, 0x0000ff),
+				}, color),
 				new Polygon({
 					new Vector(-1, -1,  1),
 					new Vector( 1,  1,  1),
 					new Vector(-1,  1,  1)
-				}, 0x0000ff),
+				}, color),
 				new Polygon({
 					new Vector(-1, -1, -1),
 					new Vector(-1, -1,  1),
 					new Vector(-1,  1,  1)
-				}, 0x0000ff),
+				}, color),
 				new Polygon({
 					new Vector(-1, -1, -1),
 					new Vector(-1,  1,  1),
 					new Vector(-1,  1, -1)
-				}, 0x0000ff),
+				}, color),
 				new Polygon({
 					new Vector(-1, -1, -1),
 					new Vector( 1, -1, -1),
 					new Vector( 1, -1,  1)
-				}, 0x0000ff),
+				}, color),
 				new Polygon({
 					new Vector(-1, -1,  1),
 					new Vector(-1, -1, -1),
 					new Vector( 1, -1,  1)
-				}, 0x0000ff)
+				}, color)
 			}, name);
 			
 			return fill_cube;

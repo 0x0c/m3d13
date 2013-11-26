@@ -19,13 +19,19 @@ int main(int argc, const char * argv[])
 	// insert code here...
 	cout << "Hello, World!" << endl;
 
-	auto polygon = Object::fill_cube("polygon");
+//	auto polygon = new Object({new Polygon({
+//		new Vector(-1, -1,  1),
+//		new Vector( 1, -1,  1),
+//		new Vector( 1,  1,  1)
+//	}, 0x0000ff)},"polygon");
+	auto polygon = Object::fill_cube("polygon", 0x0000ff);
 	polygon->transform(Matrix::scale(10, 10, 10));
-	Camera camera(Vector(0, 50, 100), Vector(0, 0, 0), Vector(0, 1, 0));
-	Light light(Vector(0, 50, 100), Vector(0, 0, 0), 1.0);
+	Camera camera(Vector(30, 50, 100), Vector(0, 0, 0), Vector(0, 1, 0));
+	Light light(Vector(30, 50, 100), Vector(0, 0, 0), 1.0);
 	auto view = new xm3d(800, 800, camera, light, "xm3d", [=](unsigned int life, XEvent e, Window window) {
-		polygon->transform(Matrix::rotate(m3d_axis_y, 0.5));
+		polygon->transform(Matrix::rotate(m3d_axis_y, .5))->transform(Matrix::rotate(m3d_axis_x, .5));
 	});
+//	view->debug_mode = true;
 	view->add_object(polygon);
 	view->run();
 
