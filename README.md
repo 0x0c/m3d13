@@ -9,7 +9,7 @@ This is a beta version.
 
 ===
 	m3d.{h,cpp}...	Core library.
-					Supporting basic vector calculation, basic matrix calculation, directional light, camera..
+					Supporting basic vector calculation, basic matrix calculation, directional light, camera.
 	xm3d.{h,cpp}...	Rendering engine using xlib.
 					Supporting draw wireframe, draw polygon, draw axis.
 ===
