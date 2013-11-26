@@ -39,12 +39,13 @@ private:
 	unsigned int height_;
 	unsigned int border_ = 2;
 	unsigned int life_ = 0;
-	Camera *camera_;
+	Camera camera_;
+	Light light_;
 	vector<Object *> *objects_;
 	Matrix *m_;
 	std::function<void(unsigned int life, XEvent e, Window window)> event_callback_;
 public:
-	xm3d(const unsigned int width, const unsigned int height, Camera *camera, const std::string name, std::function<void(unsigned int life, XEvent e, Window window)> event_callback) {
+	xm3d(const unsigned int width, const unsigned int height, Camera camera, Light light, const std::string name, std::function<void(unsigned int life, XEvent e, Window window)> event_callback) {
 		width_ = width;
 		height_ = height;
 		
@@ -66,9 +67,10 @@ public:
 		XMapSubwindows(display_, window_);
 
 		objects_ = new vector<Object *>;
-		camera_ = new Camera(*camera);
+		camera_ = camera;
+		light_ = light;
 		m_ = new Matrix(Matrix::identity());
-		m_->view(*camera_)->projection(m3d_rad(30), (double)width_ / (double)height_, 100.0, 1000.0)->screen(width_, height_);
+		m_->view(camera_)->projection(m3d_rad(30), (double)width_ / (double)height_, 100.0, 1000.0)->screen(width_, height_);
 		event_callback_ = event_callback;
 	};
 	~xm3d() {
@@ -77,7 +79,6 @@ public:
 		XDestroyWindow(display_, window_);
 		XCloseDisplay(display_);
 		delete objects_;
-		delete camera_;
 	};
 	void run();
 	void add_object(Object *object);

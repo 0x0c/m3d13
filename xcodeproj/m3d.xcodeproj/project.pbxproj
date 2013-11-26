@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E93EDD991834B7D800B76F30 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E93EDD981834B7D800B76F30 /* main.cpp */; };
+		E93DED52183FBC480004E7B2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E93DED51183FBC480004E7B2 /* main.cpp */; };
 		E9B4D00A1834B779008B44EC /* m3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9B4D0051834B772008B44EC /* m3d.cpp */; };
 		E9B4D00B1834B779008B44EC /* xm3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9B4D0081834B772008B44EC /* xm3d.cpp */; };
 /* End PBXBuildFile section */
@@ -25,12 +25,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E93EDD981834B7D800B76F30 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = source/main.cpp; sourceTree = "<group>"; };
+		E93DED51183FBC480004E7B2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../main.cpp; sourceTree = "<group>"; };
 		E9B4D0051834B772008B44EC /* m3d.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = m3d.cpp; sourceTree = "<group>"; };
 		E9B4D0061834B772008B44EC /* m3d.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = m3d.h; sourceTree = "<group>"; };
 		E9B4D0081834B772008B44EC /* xm3d.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = xm3d.cpp; sourceTree = "<group>"; };
 		E9B4D0091834B772008B44EC /* xm3d.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xm3d.h; sourceTree = "<group>"; };
 		E9DD9BF418330618002D4A5D /* m3d */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = m3d; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9E4D4DF183D77F700EDA166 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +76,8 @@
 		E9DD9BEB18330618002D4A5D = {
 			isa = PBXGroup;
 			children = (
-				E93EDD981834B7D800B76F30 /* main.cpp */,
+				E9E4D4DF183D77F700EDA166 /* README.md */,
+				E93DED51183FBC480004E7B2 /* main.cpp */,
 				E9B4D0031834B772008B44EC /* lib */,
 				E9DD9BF518330618002D4A5D /* Products */,
 			);
@@ -142,7 +144,7 @@
 			files = (
 				E9B4D00A1834B779008B44EC /* m3d.cpp in Sources */,
 				E9B4D00B1834B779008B44EC /* xm3d.cpp in Sources */,
-				E93EDD991834B7D800B76F30 /* main.cpp in Sources */,
+				E93DED52183FBC480004E7B2 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

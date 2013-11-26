@@ -7,6 +7,7 @@
 //
 
 #include "m3d.h"
+#include <algorithm>
 
 using namespace std;
 using namespace m3d;
@@ -31,14 +32,14 @@ Matrix* Matrix::_multiply(const Matrix *m)
 
 Matrix* Matrix::view(const Camera camera)
 {
-	Vector a = *camera.eye - *camera.at;
+	Vector a = camera.eye - camera.at;
 	Vector z = Vector(a).normalize();
-	Vector b = *camera.up & z;
+	Vector b = camera.up & z;
 	Vector x = Vector(b).normalize();
 	Vector y = z & x;
-	double qx = *camera.eye * x;
-	double qy = *camera.eye * y;
-	double qz = *camera.eye * z;
+	double qx = camera.eye * x;
+	double qy = camera.eye * y;
+	double qz = camera.eye * z;
 	*this *= Matrix({
 		x.x, y.x, z.x, 0,
 		x.y, y.y, z.y, 0,
@@ -126,10 +127,14 @@ Vector* Vector::multiply(const Matrix *m)
 
 #pragma mark - Polygon
 
-int Polygon::real_color(Light *light)
+unsigned long Polygon::real_color(Light light)
 {
-	//TODO:ちゃんと実装する
-	return 0;
+	Vector direction = light.at - light.position;
+	double brightness = (this->normal_vector() * direction.normalize()) * light.brightness * -1;
+	brightness = brightness < 0 ? 0 : brightness;
+	unsigned long real_color = ((this->color & 0xff0000) * brightness) + ((this->color & 0x00ff00) * brightness) + ((this->color & 0x0000ff) * brightness);
+	
+	return 0 < real_color ? real_color : 0;
 }
 
 Vector Polygon::center()
@@ -147,6 +152,20 @@ bool Polygon::far(Polygon p, Vector from)
 	double position2 = (p.center() - from).size();
 
 	return position1 >= position2;
+}
+
+bool Polygon::front(Camera camera)
+{
+	Vector direction = camera.at - camera.eye;
+	return this->normal_vector() * direction.normalize() < 0;
+}
+
+Vector Polygon::normal_vector()
+{
+	Vector v1 = *this->vertex[0] - *this->vertex[1];
+	Vector v2 = *this->vertex[0] - *this->vertex[2];
+	
+	return (v1 & v2).normalize();
 }
 
 #pragma mark - Object

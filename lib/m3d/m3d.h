@@ -116,11 +116,23 @@ namespace m3d
 	class Vector
 	{
 	public:
+		Vector() {
+			this->x = 0;
+			this->y = 0;
+			this->z = 0;
+			this->w = 0;
+		};
 		Vector(const double x, const double y, const double z) {
 			this->x = x;
 			this->y = y;
 			this->z = z;
 			this->w = 1;
+		};
+		Vector(const Vector &v) {
+			this->x = v.x;
+			this->y = v.y;
+			this->z = v.z;
+			this->w = v.w;
 		};
 		Vector operator+(const Vector& v) {
 			Vector tmp(*this);
@@ -137,7 +149,7 @@ namespace m3d
 			
 			return *this;
 		};
-		Vector operator-(const Vector& v) {
+		Vector operator-(const Vector& v) const {
 			Vector tmp(*this);
 			tmp.x -= v.x;
 			tmp.y -= v.y;
@@ -152,10 +164,10 @@ namespace m3d
 			
 			return *this;
 		};
-		double operator*(const Vector& v) {
+		double operator*(const Vector& v) const {
 			return this->x * v.x + this->y * v.y + this->z * v.z;
 		};
-		Vector operator*(const Matrix& m) {
+		Vector operator*(const Matrix& m) const {
 			Vector tmp(*this);
 			double x = this->x;
 			double y = this->y;
@@ -166,7 +178,7 @@ namespace m3d
 			tmp.z = m.m[ 2] * x + m.m[ 6] * y + m.m[10] * z + m.m[14] * w;
 			tmp.w = m.m[ 3] * x + m.m[ 7] * y + m.m[11] * z + m.m[15] * w;
 			
-			this->scale(1 / this->w);
+			tmp.scale(1 / tmp.w);
 			
 			return tmp;
 		};
@@ -184,7 +196,7 @@ namespace m3d
 			
 			return *this;
 		};
-		Vector operator&(const Vector& v) {
+		Vector operator&(const Vector& v) const {
 			Vector tmp(*this);
 			double x = tmp.x;
 			double y = tmp.y;
@@ -235,60 +247,73 @@ namespace m3d
 	class Camera
 	{
 	public:
+		Camera() {
+			this->eye = Vector(0, 0, 0);
+			this->at = Vector(0, 0, 0);
+			this->up = Vector(0, 0, 0);
+		};
 		Camera(Vector eye, Vector at, Vector up) {
-			this->eye = new Vector(eye);
-			this->at = new Vector(at);
-			this->up = new Vector(up);
+			this->eye = eye;
+			this->at = at;
+			this->up = up;
+		};
+		Camera(const Camera &c) {
+			this->eye = c.eye;
+			this->at = c.at;
+			this->up = c.up;
 		};
 		~Camera() {
-			delete eye;
-			delete at;
-			delete up;
 		};
 		void lookup(const Vector target);
 		void move(const Vector to);
 		
 		/* data */
-		Vector *eye;
-		Vector *at;
-		Vector *up;
+		Vector eye;
+		Vector at;
+		Vector up;
 	};
 	
 	class Light
 	{
 	public:
-		Light(Vector *position, Vector *direction, double brightness) {
+		Light() {
+			this->position = Vector(0, 0, 0);
+			this->at = Vector(0, 0, 0);
+			this->brightness = 1.0;
+		}
+		Light(Vector position, Vector at, double brightness) {
 			this->position = position;
-			this->direction = direction;
+			this->at = at;
 			this->brightness = brightness;
 		};
 		~Light() {
-			delete position;
 		};
 		
 		/* data */
-		Vector *position;
-		Vector *direction;
+		Vector position;
+		Vector at;
 		double brightness;
 	};
 	
 	class Polygon
 	{
 	public:
-		Polygon(const std::array<Vector *, 3> vertex, const int color) {
+		Polygon(const std::array<Vector *, 3> vertex, const unsigned long color) {
 			this->vertex = vertex;
 			this->color = color;
 		};
 		~Polygon() {
 			
 		};
+		unsigned long real_color(Light light);
 		bool far(Polygon p, Vector from);
+		bool front(Camera camera);
 		Vector center();
-		int real_color(Light *light);
+		Vector normal_vector();
 		
 		/* data */
 		std::array<Vector *, 3> vertex;
-		int color;
+		unsigned long color;
 	};
 	
 	class Object
@@ -350,6 +375,72 @@ namespace m3d
 			
 			return pyramid3;
 		};
+		static Object* fill_cube(const std::string name) {
+			Object *fill_cube = new Object({
+				new Polygon({
+					new Vector( 1,  1, -1),
+					new Vector(-1,  1, -1),
+					new Vector( 1,  1,  1)
+				}, 0x0000ff),
+				new Polygon({
+					new Vector( 1,  1,  1),
+					new Vector(-1,  1, -1),
+					new Vector(-1,  1,  1)
+				}, 0x0000ff),
+				new Polygon({
+					new Vector( 1, -1, -1),
+					new Vector( 1,  1, -1),
+					new Vector( 1,  1,  1)
+				}, 0x0000ff),
+				new Polygon({
+					new Vector( 1, -1,  1),
+					new Vector( 1, -1, -1),
+					new Vector( 1,  1,  1)
+				}, 0x0000ff),
+				new Polygon({
+					new Vector( 1, -1, -1),
+					new Vector(-1, -1, -1),
+					new Vector( 1,  1, -1)
+				}, 0x0000ff),
+				new Polygon({
+					new Vector( 1,  1, -1),
+					new Vector(-1, -1, -1),
+					new Vector(-1,  1, -1)
+				}, 0x0000ff),
+				new Polygon({
+					new Vector(-1, -1,  1),
+					new Vector( 1, -1,  1),
+					new Vector( 1,  1,  1),
+				}, 0x0000ff),
+				new Polygon({
+					new Vector(-1, -1,  1),
+					new Vector( 1,  1,  1),
+					new Vector(-1,  1,  1)
+				}, 0x0000ff),
+				new Polygon({
+					new Vector(-1, -1, -1),
+					new Vector(-1, -1,  1),
+					new Vector(-1,  1,  1)
+				}, 0x0000ff),
+				new Polygon({
+					new Vector(-1, -1, -1),
+					new Vector(-1,  1,  1),
+					new Vector(-1,  1, -1)
+				}, 0x0000ff),
+				new Polygon({
+					new Vector(-1, -1, -1),
+					new Vector( 1, -1, -1),
+					new Vector( 1, -1,  1)
+				}, 0x0000ff),
+				new Polygon({
+					new Vector(-1, -1,  1),
+					new Vector(-1, -1, -1),
+					new Vector( 1, -1,  1)
+				}, 0x0000ff)
+			}, name);
+			
+			return fill_cube;
+		}
 		
 		/* data */
 		std::string name;
