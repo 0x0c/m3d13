@@ -15,9 +15,7 @@
 
 void xm3d::_z_sort()
 {
-	//TODO:cameraの中の値がバグる
-//	Vector c = camera_->eye;
-	Vector c = Vector(10, 50, 100);
+	Vector c = Vector(camera_.eye);
 	vector<Object *>::iterator it_b = this->objects_->begin();
 	for (it_b = this->objects_->begin(); it_b != this->objects_->end(); ++it_b) {
 		Object *object = (Object *)*it_b;
