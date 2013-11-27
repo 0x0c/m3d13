@@ -1,3 +1,4 @@
+#Makefile for Ubuntu13.10
 all:	main.o m3d.o xm3d.o
 	clang++ -std=c++11 -o demo main.o m3d.o xm3d.o -L/usr/bin/X11 -I/usr/include/X11 -lX11
 main.o:	main.cpp
