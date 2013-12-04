@@ -23,6 +23,7 @@ using namespace m3d;
 class xm3d {
 private:
 	void _z_sort();
+	void _object_z_sort();
 	void _draw();
 	void _draw_axis();
 
@@ -41,7 +42,7 @@ private:
 	unsigned int life_ = 0;
 	Camera camera_;
 	Light light_;
-	vector<Object *> *objects_;
+	vector<Object> *objects_;
 	Matrix *m_;
 	std::function<void(unsigned int life, XEvent e, Window window)> event_callback_;
 public:
@@ -66,7 +67,7 @@ public:
 		XMapWindow(display_, window_);
 		XMapSubwindows(display_, window_);
 
-		objects_ = new vector<Object *>;
+		objects_ = new vector<Object>;
 		camera_ = camera;
 		light_ = light;
 		m_ = new Matrix(Matrix::identity());
@@ -81,7 +82,7 @@ public:
 		delete objects_;
 	};
 	void run();
-	void add_object(Object *object);
+	void add_object(Object object);
 	
 	unsigned int fps = 60;
 	bool debug_mode = false;
