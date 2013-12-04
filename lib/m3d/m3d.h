@@ -230,19 +230,6 @@ namespace m3d
 		double z;
 		double w;
 	};
-
-	class Wire
-	{
-	public:
-		Wire(int a, int b){
-			this->a = a;
-			this->b = b;
-		};
-
-		/* data */
-		int a;
-		int b;
-	};
 	
 	class Camera
 	{
@@ -319,133 +306,85 @@ namespace m3d
 	class Object
 	{
 	public:
-		Object(const std::vector<Vector *>vertex, const std::vector<Wire *>wire, const std::string name) {
-			this->vertex = vertex;
-			this->wire = wire;
-			this->name = name;
+		Object() {
 		};
-		Object(const std::vector<Polygon *>polygon, const std::string name) {
+		Object(const std::vector<Polygon>polygon, const std::string name) {
 			this->polygon = polygon;
 			this->name = name;
 		};
-		~Object();
+		~Object() {
+			
+		};
 		Object* transform(const Matrix *m);
 		Object* transform(const std::array<double, 16> m);
-		static Object* cube(const std::string name) {
-			Object *cube = new Object({
-				new Vector(-1, -1, -1),
-				new Vector( 1, -1, -1),
-				new Vector( 1,  1, -1),
-				new Vector(-1,  1, -1),
-				new Vector(-1, -1,  1),
-				new Vector( 1, -1,  1),
-				new Vector( 1,  1,  1),
-				new Vector(-1,  1,  1)
-			}, {
-				new Wire(0, 1),
-				new Wire(1, 2),
-				new Wire(2, 3),
-				new Wire(3, 0),
-				new Wire(4, 5),
-				new Wire(5, 6),
-				new Wire(6, 7),
-				new Wire(7, 4),
-				new Wire(0, 4),
-				new Wire(1, 5),
-				new Wire(2, 6),
-				new Wire(3, 7),
-			}, name);
-			
-			return cube;
-		};
-		static Object* pyramid3(const std::string name) {
-			Object *pyramid3 = new Object({
-				new Vector(-1, -1, -1),
-				new Vector(-1,  1,  1),
-				new Vector( 1,  1, -1),
-				new Vector( 1, -1,  1),
-			}, {
-				new Wire(0, 1),
-				new Wire(1, 2),
-				new Wire(2, 0),
-				new Wire(0, 3),
-				new Wire(1, 3),
-				new Wire(2, 3),
-			}, name);
-			
-			return pyramid3;
-		};
+		bool far(Object object, Vector from);
 		static Object* fill_cube(const std::string name, unsigned long color) {
-			Object *fill_cube = new Object({
-				new Polygon({
+			return new Object({
+				Polygon({
 					new Vector( 1,  1, -1),
 					new Vector(-1,  1, -1),
 					new Vector( 1,  1,  1)
 				}, color),
-				new Polygon({
+				Polygon({
 					new Vector( 1,  1,  1),
 					new Vector(-1,  1, -1),
 					new Vector(-1,  1,  1)
 				}, color),
-				new Polygon({
+				Polygon({
 					new Vector( 1, -1, -1),
 					new Vector( 1,  1, -1),
 					new Vector( 1,  1,  1)
 				}, color),
-				new Polygon({
+				Polygon({
 					new Vector( 1, -1,  1),
 					new Vector( 1, -1, -1),
 					new Vector( 1,  1,  1)
 				}, color),
-				new Polygon({
+				Polygon({
 					new Vector( 1, -1, -1),
 					new Vector(-1, -1, -1),
 					new Vector( 1,  1, -1)
 				}, color),
-				new Polygon({
+				Polygon({
 					new Vector( 1,  1, -1),
 					new Vector(-1, -1, -1),
 					new Vector(-1,  1, -1)
 				}, color),
-				new Polygon({
+				Polygon({
 					new Vector(-1, -1,  1),
 					new Vector( 1, -1,  1),
 					new Vector( 1,  1,  1),
 				}, color),
-				new Polygon({
+				Polygon({
 					new Vector(-1, -1,  1),
 					new Vector( 1,  1,  1),
 					new Vector(-1,  1,  1)
 				}, color),
-				new Polygon({
+				Polygon({
 					new Vector(-1, -1, -1),
 					new Vector(-1, -1,  1),
 					new Vector(-1,  1,  1)
 				}, color),
-				new Polygon({
+				Polygon({
 					new Vector(-1, -1, -1),
 					new Vector(-1,  1,  1),
 					new Vector(-1,  1, -1)
 				}, color),
-				new Polygon({
+				Polygon({
 					new Vector(-1, -1, -1),
 					new Vector( 1, -1, -1),
 					new Vector( 1, -1,  1)
 				}, color),
-				new Polygon({
+				Polygon({
 					new Vector(-1, -1,  1),
 					new Vector(-1, -1, -1),
 					new Vector( 1, -1,  1)
 				}, color)
 			}, name);
-			
-			return fill_cube;
-		}
+		};
 		
 		/* data */
 		std::string name;
-		std::vector<Vector *>vertex;
-		std::vector<Wire *>wire;
-		std::vector<Polygon *>polygon;
+		std::vector<Polygon>polygon;
 	};
 }

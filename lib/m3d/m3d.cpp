@@ -140,18 +140,20 @@ unsigned long Polygon::real_color(Light light)
 Vector Polygon::center()
 {
 	return Vector(
-				  (this->vertex[0]->x + this->vertex[1]->x + this->vertex[2]->x) / 3.0,
+				  (this->vertex[0]->x
+				   + this->vertex[1]->x + this->vertex[2]->x) / 3.0,
 				  (this->vertex[0]->y + this->vertex[1]->y + this->vertex[2]->y) / 3.0,
 				  (this->vertex[0]->z + this->vertex[1]->z + this->vertex[2]->z) / 3.0
 				  );
 }
+
 
 bool Polygon::far(Polygon p, Vector from)
 {
 	double position1 = (this->center() - from).size();
 	double position2 = (p.center() - from).size();
 
-	return position1 >= position2;
+	return position1 > position2;
 }
 
 bool Polygon::front(Camera camera)
@@ -172,20 +174,14 @@ Vector Polygon::normal_vector()
 
 Object* Object::transform(const Matrix *m)
 {
-	vector<Polygon *>::iterator it_p = this->polygon.begin();
+	vector<Polygon>::iterator it_p = this->polygon.begin();
 	for (it_p = this->polygon.begin(); it_p != this->polygon.end(); ++it_p) {
-		Polygon *p = (Polygon *)*it_p;
-		array<Vector *, 3>::iterator it_a = p->vertex.begin();
-		for (it_a = p->vertex.begin(); it_a != p->vertex.end(); ++it_a) {
+		Polygon p = (Polygon)*it_p;
+		array<Vector *, 3>::iterator it_a = p.vertex.begin();
+		for (it_a = p.vertex.begin(); it_a != p.vertex.end(); ++it_a) {
 			Vector *v = (Vector *)*it_a;
 			v->multiply(m);
 		}
-	}
-	
-	vector<Vector *>::iterator it_v = this->vertex.begin();
-	for (it_v = this->vertex.begin(); it_v != this->vertex.end(); ++it_v) {
-		Vector *v = (Vector *)*it_v;
-		v->multiply(m);
 	}
 	
 	return this;
@@ -195,4 +191,9 @@ Object* Object::transform(const std::array<double, 16> m)
 {
 	Matrix t(m);
 	return this->transform(&t);
+}
+
+bool Object::far(Object object, Vector from)
+{
+	return false;
 }
