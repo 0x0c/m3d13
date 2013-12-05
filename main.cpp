@@ -10,7 +10,6 @@
 #include <array>
 #include "m3d.h"
 #include "xm3d.h"
-#include "m3d_obj_loader.h"
 
 using namespace std;
 using namespace m3d;
