@@ -2,7 +2,7 @@ m3d13
 ===
 The m3d13 is a tiny 3DCG library using C++11.
 
-![](https://raw.github.com/0x0c/m3d13/master/sample2.png)
+![](https://raw.github.com/0x0c/m3d13/master/sample.png)
 
 This is a beta version.
 
