@@ -10,6 +10,7 @@
 #include <array>
 #include "m3d.h"
 #include "xm3d.h"
+#include "m3d_obj_loader.h"
 
 using namespace std;
 using namespace m3d;
@@ -18,22 +19,16 @@ int main(int argc, const char * argv[])
 {
 	// insert code here...
 	cout << "Hello, World!" << endl;
-
-//	auto polygon = new Object({new Polygon({
-//		new Vector(-1, -1,  1),
-//		new Vector( 1, -1,  1),
-//		new Vector( 1,  1,  1)
-//	}, 0x0000ff)},"polygon");
-	auto polygon = Object::fill_cube("polygon", 0x0000ff);
-	polygon->transform(Matrix::scale(10, 10, 10));
-	Camera camera(Vector(30, 50, 100), Vector(0, 0, 0), Vector(0, 1, 0));
-	Light light(Vector(30, 50, 100), Vector(0, 0, 0), 1.0);
+	auto polygon = Object::fill_cube("cube", 0xff0000);
+	Camera camera(Vector(10, 10, 10), Vector(0, 0, 0), Vector(0, 1, 0));
+	Light light(camera.eye, camera.at, 1.0);
 	auto view = new xm3d(800, 800, camera, light, "xm3d", [=](unsigned int life, XEvent e, Window window) {
-		polygon->transform(Matrix::rotate(m3d_axis_y, .5))->transform(Matrix::rotate(m3d_axis_x, .5));
+		polygon->transform(Matrix::rotate(m3d_axis_y, 1.0));
 	});
-//	view->debug_mode = true;
-	view->add_object(polygon);
+	view->add_object(*polygon);
 	view->run();
-
+	
+	return 0;
+	
 	return 0;
 }
