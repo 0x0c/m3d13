@@ -125,6 +125,7 @@ void xm3d::_draw_axis()
 void xm3d::run()
 {
 	suspend = false;
+	XSelectInput(display_ ,window_ , ExposureMask | ButtonPressMask | ButtonMotionMask | KeyPressMask);
 	while(!suspend) {
 		if(XPending(display_)) {
 			XNextEvent(display_, &this->e_);

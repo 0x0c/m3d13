@@ -19,16 +19,32 @@ int main(int argc, const char * argv[])
 	// insert code here...
 	auto polygon = Object::fill_cube("cube", 0xff0000);
 	polygon->transform(Matrix::scale(2, 2, 2));
-//	polygon->transform(Matrix::move(1, 1, 1));
-	Camera camera(Vector(10, 10, 10), Vector(0, 0, 0), Vector(0, 1, 0));
-	Light light(Vector(3, 4, 5), Vector(0, 0, 0), 1.0);
+	auto q = Quaternion(Vector(1, 1, 1), 45);
+	auto m = q.matrix();
+	polygon->transform(&m);
+	Camera camera(Vector(20, 0, 0), Vector(0, 0, 0), Vector(0, 1, 0));
+	Light light(Vector(5, 0, 0), Vector(0, 0, 0), 1.0);
+	int *sx = new int, *sy = new int;
 	auto view = new xm3d(800, 800, camera, light, "xm3d", [=](unsigned long frame, XEvent e, Window window) {
-//		polygon->transform(Matrix::rotate(m3d_axis_x, 1.0))->transform(Matrix::rotate(m3d_axis_y, .50))->transform(Matrix::rotate(m3d_axis_z, 1.0));
-		polygon->transform(Matrix::rotate(m3d_axis_y, 1));
-		
-//		Matrix m = Quaternion(Vector(0, 1, 0), 1).matrix();
-//		polygon->transform(&m);
+		switch (e.type) {
+			case ButtonPress:
+				if(e.xany.window == window) {
+					*sx = e.xbutton.x;
+					*sy = e.xbutton.y;
+				}
+				break;
+			case MotionNotify:
+				if(e.xany.window == window) {
+					int tx = *sx - e.xbutton.x;
+					int ty = *sy - e.xbutton.y;
+					polygon->transform(Matrix::rotate(m3d_axis_y, 0.15 * tx))->transform(Matrix::rotate(m3d_axis_z, 0.15 * ty));
+					*sx = e.xbutton.x;
+					*sy = e.xbutton.y;
+				}
+				break;
+		}
 	});
+	
 	view->add_object(*polygon);
 	view->run();
 	

@@ -93,6 +93,15 @@ namespace m3d
 			}
 			return *this;
 		};
+		void print() {
+			for (int i = 1; i < 17; i++) {
+				printf("%f ", this->m[i - 1]);
+				if (i % 4 == 0) {
+					printf("\n");
+				}
+			}
+			printf("\n--\n");
+		}
 
 		Matrix* view(const Camera camera);
 		Matrix* projection(const double angle, const double aspect, const double near, const double far);
@@ -483,7 +492,7 @@ namespace m3d
 		};
 		Quaternion operator*(const Quaternion &q) const {
 			Quaternion tmp(*this);
-			tmp.w = this->w * q.w - this->w * q.w;
+			tmp.w = this->w * q.w - this->iv * q.iv;
 			tmp.iv = q.iv * this->w + this->iv * q.w + this->iv & q.iv;
 			return tmp;
 		}
@@ -507,6 +516,7 @@ namespace m3d
 				0				,0				,0				,1
 			});
 		};
+		
 		/* data */
 		Vector iv;
 		double w;
