@@ -140,8 +140,7 @@ unsigned long Polygon::real_color(Light light)
 Vector Polygon::center()
 {
 	return Vector(
-				  (this->vertex[0]->x
-				   + this->vertex[1]->x + this->vertex[2]->x) / 3.0,
+				  (this->vertex[0]->x + this->vertex[1]->x + this->vertex[2]->x) / 3.0,
 				  (this->vertex[0]->y + this->vertex[1]->y + this->vertex[2]->y) / 3.0,
 				  (this->vertex[0]->z + this->vertex[1]->z + this->vertex[2]->z) / 3.0
 				  );

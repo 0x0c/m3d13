@@ -32,17 +32,68 @@ namespace m3d
 		Matrix(const std::array<double, 16> m) {
 			this->m = m;
 		};
+		Matrix operator+(const Matrix& m) {
+			Matrix tmp(*this);
+			for(int i = 0; i < 16; i++) {
+				tmp.m[i] += m.m[i];
+			}
+			return tmp;
+		};
+		Matrix& operator+=(const Matrix& m) {
+			for(int i = 0; i < 16; i++) {
+				this->m[i] += m.m[i];
+			}
+			return *this;
+		};
+		Matrix operator-(const Matrix& m) {
+			Matrix tmp(*this);
+			for(int i = 0; i < 16; i++) {
+				tmp.m[i] -= m.m[i];
+			}
+			return tmp;
+		};
+		Matrix& operator-=(const Matrix& m) {
+			for(int i = 0; i < 16; i++) {
+				this->m[i] -= m.m[i];
+			}
+			return *this;
+		};
 		Matrix operator*(const Matrix& m) {
 			Matrix tmp(*this);
 			tmp._multiply(&m);
-			
 			return tmp;
 		};
 		Matrix& operator*=(const Matrix& m) {
 			this->_multiply(&m);
-			
 			return *this;
 		};
+		Matrix operator*(const double n) {
+			Matrix tmp(*this);
+			for(int i = 0; i < 16; i++) {
+				this->m[i] *= n;
+			}
+			return tmp;
+		};
+		Matrix& operator*=(const double n) {
+			for(int i = 0; i < 16; i++) {
+				this->m[i] *= n;
+			}
+			return *this;
+		};
+		Matrix operator/(const double n) {
+			Matrix tmp(*this);
+			for(int i = 0; i < 16; i++) {
+				this->m[i] /= n;
+			}
+			return tmp;
+		};
+		Matrix& operator/=(const double n) {
+			for(int i = 0; i < 16; i++) {
+				this->m[i] /= n;
+			}
+			return *this;
+		};
+
 		Matrix* view(const Camera camera);
 		Matrix* projection(const double angle, const double aspect, const double near, const double far);
 		Matrix* screen(const double x, const double y);
@@ -62,7 +113,7 @@ namespace m3d
 					break;
 				case m3d_axis_y: {
 					r = {
-						cos(rad)	,0			,-sin(rad),0,
+						cos(rad)	,0			,-sin(rad)	,0,
 						0			,1			,0			,0,
 						sin(rad)	,0			,cos(rad)	,0,
 						0			,0			,0			,1
@@ -167,6 +218,23 @@ namespace m3d
 		double operator*(const Vector& v) const {
 			return this->x * v.x + this->y * v.y + this->z * v.z;
 		};
+		double operator*=(const Vector& v) {
+			Vector tmp(*this);
+			return tmp.x * v.x + tmp.y * v.y + tmp.z * v.z;
+		};
+		Vector operator*(const double n) const {
+			Vector tmp(*this);
+			tmp.x *= n;
+			tmp.y *= n;
+			tmp.z *= n;
+			return tmp;
+		};
+		Vector& operator*=(const double n) {
+			this->x *= n;
+			this->y *= n;
+			this->z *= n;
+			return *this;
+		};
 		Vector operator*(const Matrix& m) const {
 			Vector tmp(*this);
 			double x = this->x;
@@ -219,6 +287,10 @@ namespace m3d
 			
 			return *this;
 		};
+		double operator^(const Vector &v) {
+			Vector tmp(*this);
+			return acos(tmp * v);
+		}
 		Vector normalize();
 		double size();
 		Vector* scale(const double k);
@@ -386,5 +458,47 @@ namespace m3d
 		/* data */
 		std::string name;
 		std::vector<Polygon>polygon;
+	};
+	
+	class Quaternion
+	{
+	public:
+		Quaternion(Vector v, double theta) {
+			Vector tmp(v);
+			tmp.normalize();
+			this->iv.x = sin(theta / 2) * -tmp.x;
+			this->iv.y = sin(theta / 2) * -tmp.y;
+			this->iv.z = sin(theta / 2) * -tmp.z;
+			this->w = cos(theta / 2);
+		};
+		Quaternion operator*(const Quaternion &q) const {
+			Quaternion tmp(*this);
+			tmp.w = this->w * q.w - this->w * q.w;
+			tmp.iv = q.iv * this->w + this->iv * q.w + this->iv & q.iv;
+			return tmp;
+		}
+		Quaternion& operator*=(const Quaternion& m) {
+			return *this;
+		};
+		Matrix matrix() {
+			double x2 = 2.0 * iv.x * iv.x;
+			double y2 = 2.0 * iv.y * iv.y;
+			double z2 = 2.0 * iv.z * iv.z;
+			double xy = 2.0 * iv.x * iv.y;
+			double yz = 2.0 * iv.y * iv.z;
+			double zx = 2.0 * iv.z * iv.x;
+			double wx = 2.0 * iv.x * w;
+			double wy = 2.0 * iv.y * w;
+			double wz = 2.0 * iv.z * w;
+			return Matrix({
+				1.0 - y2 - z2	,xy - wz		,zx + wy		,0,
+				xy + wz			,1.0 - z2 - x2	,yz - wx		,0,
+				zx - wy			,yz + wx		,1.0 - x2 - y2	,0,
+				0				,0				,0				,1
+			});
+		};
+		/* data */
+		Vector iv;
+		double w;
 	};
 }
