@@ -150,7 +150,7 @@ void xm3d::run()
 		}
 		else {
 			if (debug_mode) {
-				cout << "--draw!(" << life_ << ")--" << endl;
+				cout << "--draw!(" << frame_ << ")--" << endl;
 			}
 			XDrawString(display_, quit_, graphic_context_, 4, 10, "QUIT", 4);
 			XSetForeground(display_, graphic_context_, white_);
@@ -169,10 +169,10 @@ void xm3d::run()
 		}
 		
 		if (event_callback_ != nullptr) {
-			event_callback_(life_, e_, window_);
+			event_callback_(frame_, e_, window_);
 		}
 		XFlush(this->display_);
-		life_++;
+		frame_++;
 	}
 }
 

@@ -39,14 +39,14 @@ private:
 	unsigned int width_;
 	unsigned int height_;
 	unsigned int border_ = 2;
-	unsigned int life_ = 0;
+	unsigned long frame_ = 0;
 	Camera camera_;
 	Light light_;
 	vector<Object> *objects_;
 	Matrix *m_;
-	std::function<void(unsigned int life, XEvent e, Window window)> event_callback_;
+	std::function<void(unsigned long frame, XEvent e, Window window)> event_callback_;
 public:
-	xm3d(const unsigned int width, const unsigned int height, Camera camera, Light light, const std::string name, std::function<void(unsigned int life, XEvent e, Window window)> event_callback) {
+	xm3d(const unsigned int width, const unsigned int height, Camera camera, Light light, const std::string name, std::function<void(unsigned long frame, XEvent e, Window window)> event_callback) {
 		width_ = width;
 		height_ = height;
 		

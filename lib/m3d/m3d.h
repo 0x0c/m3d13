@@ -17,7 +17,7 @@
 
 namespace m3d
 {
-	static std::string version = "1.0";
+	static std::string version = "1.2";
 	
 	typedef enum {
 		m3d_axis_x = 1 << 0,
@@ -463,13 +463,23 @@ namespace m3d
 	class Quaternion
 	{
 	public:
+		Quaternion(int flag, double theta) {
+			Vector v(flag & m3d_axis_x, flag & m3d_axis_y, flag & m3d_axis_z);
+			v.normalize();
+			double rad = m3d_rad(theta / 2);
+			this->iv.x = sin(rad) * -v.x;
+			this->iv.y = sin(rad) * -v.y;
+			this->iv.z = sin(rad) * -v.z;
+			this->w = cos(rad);
+		}
 		Quaternion(Vector v, double theta) {
 			Vector tmp(v);
 			tmp.normalize();
-			this->iv.x = sin(theta / 2) * -tmp.x;
-			this->iv.y = sin(theta / 2) * -tmp.y;
-			this->iv.z = sin(theta / 2) * -tmp.z;
-			this->w = cos(theta / 2);
+			double rad = m3d_rad(theta / 2);
+			this->iv.x = sin(rad) * -tmp.x;
+			this->iv.y = sin(rad) * -tmp.y;
+			this->iv.z = sin(rad) * -tmp.z;
+			this->w = cos(rad);
 		};
 		Quaternion operator*(const Quaternion &q) const {
 			Quaternion tmp(*this);
