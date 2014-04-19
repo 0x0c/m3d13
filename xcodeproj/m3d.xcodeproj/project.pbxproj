@@ -25,6 +25,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E915A8C7184D8F1000BE04A5 /* m3d_obj_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m3d_obj_loader.h; sourceTree = "<group>"; };
 		E93DED51183FBC480004E7B2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../main.cpp; sourceTree = "<group>"; };
 		E9B4D0051834B772008B44EC /* m3d.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = m3d.cpp; sourceTree = "<group>"; };
 		E9B4D0061834B772008B44EC /* m3d.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = m3d.h; sourceTree = "<group>"; };
@@ -45,6 +46,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E915A8C5184D8EE200BE04A5 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				E915A8C7184D8F1000BE04A5 /* m3d_obj_loader.h */,
+			);
+			name = util;
+			path = ../util;
+			sourceTree = "<group>";
+		};
 		E9B4D0031834B772008B44EC /* lib */ = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +88,7 @@
 			children = (
 				E9E4D4DF183D77F700EDA166 /* README.md */,
 				E93DED51183FBC480004E7B2 /* main.cpp */,
+				E915A8C5184D8EE200BE04A5 /* util */,
 				E9B4D0031834B772008B44EC /* lib */,
 				E9DD9BF518330618002D4A5D /* Products */,
 			);
