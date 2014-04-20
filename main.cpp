@@ -18,15 +18,15 @@ using namespace m3d;
 int main(int argc, const char * argv[])
 {
 	// insert code here...
-	auto polygon2 = Object::fill_cube("cube", 0x00ff00);
-	polygon2->transform(Matrix::scale(2, 2, 2));
-	polygon2->transform(Matrix::move(3, 4, 5));
 	auto polygon = Object::fill_cube("cube", 0xff0000);
 	polygon->transform(Matrix::scale(2, 2, 2));
-	auto q = Quaternion(Vector(1, 1, 1), 45);
-	auto m = q.matrix();
-	polygon->transform(&m);
-	Camera camera(Vector(20, 0, 0), Vector(0, 0, 0), Vector(0, 1, 0));
+	auto polygon2 = Object::fill_cube("cube", 0x00ff00);
+	polygon2->transform(Matrix::move(3, 4, 5));
+	polygon2->transform(Matrix::scale(2, 2, 2));
+	auto polygon3 = Object::fill_cube("cube", 0x0000ff);
+	polygon3->transform(Matrix::move(-3, -4, -5));
+	polygon3->transform(Matrix::scale(3, 3, 3));
+	Camera camera(Vector(30, 0, 0), Vector(0, 0, 0), Vector(0, 1, 0));
 	Light light(Vector(5, 0, 0), Vector(0, 0, 0), 1.0);
 	int *sx = new int, *sy = new int;
 	auto view = new xm3d(800, 800, camera, light, "xm3d", [=](unsigned long frame, XEvent e, Window window) {
@@ -43,6 +43,7 @@ int main(int argc, const char * argv[])
 					int ty = *sy - e.xbutton.y;
 					polygon->transform(Matrix::rotate(m3d_axis_y, 0.15 * tx))->transform(Matrix::rotate(m3d_axis_z, 0.15 * ty));
 					polygon2->transform(Matrix::rotate(m3d_axis_y, 0.15 * tx))->transform(Matrix::rotate(m3d_axis_z, 0.15 * ty));
+					polygon3->transform(Matrix::rotate(m3d_axis_y, 0.15 * tx))->transform(Matrix::rotate(m3d_axis_z, 0.15 * ty));
 					*sx = e.xbutton.x;
 					*sy = e.xbutton.y;
 				}
@@ -52,6 +53,7 @@ int main(int argc, const char * argv[])
 	
 	view->add_object(*polygon);
 	view->add_object(*polygon2);
+	view->add_object(*polygon3);
 	view->run();
 	
 	return 0;
