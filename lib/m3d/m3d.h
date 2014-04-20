@@ -17,7 +17,7 @@
 
 namespace m3d
 {
-	static std::string version = "1.2";
+	static std::string version = "1.3";
 	
 	typedef enum {
 		m3d_axis_x = 1 << 0,
