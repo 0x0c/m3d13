@@ -25,14 +25,6 @@ void xm3d::_z_sort()
 	}
 }
 
-void xm3d::_object_z_sort()
-{
-//	Vector c = Vector(camera_.eye);
-//	sort(objects_->begin(), objects_->end(), [=](Object *a, Object *b) {
-//		return a->far(*b, c);
-//	});
-}
-
 void xm3d::_draw()
 {
 	if (this->draw_axis) {

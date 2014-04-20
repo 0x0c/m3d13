@@ -10,6 +10,7 @@
 #include <array>
 #include "m3d.h"
 #include "xm3d.h"
+#include "m3d_obj_loader.h"
 
 using namespace std;
 using namespace m3d;
@@ -17,6 +18,9 @@ using namespace m3d;
 int main(int argc, const char * argv[])
 {
 	// insert code here...
+	auto polygon2 = Object::fill_cube("cube", 0x00ff00);
+	polygon2->transform(Matrix::scale(2, 2, 2));
+	polygon2->transform(Matrix::move(3, 4, 5));
 	auto polygon = Object::fill_cube("cube", 0xff0000);
 	polygon->transform(Matrix::scale(2, 2, 2));
 	auto q = Quaternion(Vector(1, 1, 1), 45);
@@ -38,6 +42,7 @@ int main(int argc, const char * argv[])
 					int tx = *sx - e.xbutton.x;
 					int ty = *sy - e.xbutton.y;
 					polygon->transform(Matrix::rotate(m3d_axis_y, 0.15 * tx))->transform(Matrix::rotate(m3d_axis_z, 0.15 * ty));
+					polygon2->transform(Matrix::rotate(m3d_axis_y, 0.15 * tx))->transform(Matrix::rotate(m3d_axis_z, 0.15 * ty));
 					*sx = e.xbutton.x;
 					*sy = e.xbutton.y;
 				}
@@ -46,9 +51,8 @@ int main(int argc, const char * argv[])
 	});
 	
 	view->add_object(*polygon);
+	view->add_object(*polygon2);
 	view->run();
-	
-	return 0;
 	
 	return 0;
 }
