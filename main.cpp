@@ -21,11 +21,11 @@ int main(int argc, const char * argv[])
 	auto polygon = Object::fill_cube("cube", 0xff0000);
 	polygon->transform(Matrix::scale(2, 2, 2));
 	auto polygon2 = Object::fill_cube("cube", 0x00ff00);
-	polygon2->transform(Matrix::move(3, 4, 5));
+	polygon2->transform(Matrix::move(1, 2, 3));
 	polygon2->transform(Matrix::scale(2, 2, 2));
 	auto polygon3 = Object::fill_cube("cube", 0x0000ff);
-	polygon3->transform(Matrix::move(-3, -4, -5));
-	polygon3->transform(Matrix::scale(3, 3, 3));
+	polygon3->transform(Matrix::move(-1, -2, -3));
+	polygon3->transform(Matrix::scale(2, 2, 2));
 	Camera camera(Vector(30, 0, 0), Vector(0, 0, 0), Vector(0, 1, 0));
 	Light light(Vector(5, 0, 0), Vector(0, 0, 0), 1.0);
 	int *sx = new int, *sy = new int;
@@ -49,6 +49,9 @@ int main(int argc, const char * argv[])
 				}
 				break;
 		}
+		polygon->transform(Matrix::rotate(m3d_axis_y, 0.15))->transform(Matrix::rotate(m3d_axis_z, 0.15));
+		polygon2->transform(Matrix::rotate(m3d_axis_y, 0.15))->transform(Matrix::rotate(m3d_axis_z, 0.15));
+		polygon3->transform(Matrix::rotate(m3d_axis_y, 0.15))->transform(Matrix::rotate(m3d_axis_z, 0.15));
 	});
 	
 	view->add_object(*polygon);
