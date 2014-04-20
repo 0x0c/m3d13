@@ -15,14 +15,21 @@
 
 void xm3d::_z_sort()
 {
-	Vector c = Vector(camera_.eye);
+	drawable_->clear();
 	vector<Object>::iterator it_b = this->objects_->begin();
 	for (it_b = this->objects_->begin(); it_b != this->objects_->end(); ++it_b) {
 		Object object = (Object)*it_b;
-		sort(object.polygon.begin(), object.polygon.end(), [=](Polygon a, Polygon b) {
-			return a.far(b, c);
-		});
+		vector<Polygon>::iterator it_p;
+		for (it_p = object.polygon.begin(); it_p != object.polygon.end(); ++it_p) {
+			Polygon p = (Polygon)*it_p;
+			drawable_->push_back(p);
+		}
 	}
+	
+	Vector c = Vector(camera_.eye);
+	sort(drawable_->begin(), drawable_->end(), [=](Polygon a, Polygon b) {
+		return a.far(b, c);
+	});
 }
 
 void xm3d::_draw()
@@ -46,44 +53,41 @@ void xm3d::_draw()
 		};
 		XFillPolygon(display_, pix_map_, graphic_context_, point, 3, Convex, CoordModeOrigin);
 	}
-	
-	vector<Object>::iterator it_b = this->objects_->begin();
-	for (it_b = this->objects_->begin(); it_b != this->objects_->end(); ++it_b) {
-		Object object = (Object)*it_b;
+
+	this->_z_sort();
+	vector<Polygon>::iterator it_p;;
+	for (it_p = drawable_->begin(); it_p != drawable_->end(); ++it_p) {
+		Polygon p = (Polygon)*it_p;
 		XSetForeground(display_, graphic_context_, line_color);
-		this->_z_sort();
+		
 		int i = 0;
-		vector<Polygon>::iterator it_p = object.polygon.begin();
-		for (it_p = object.polygon.begin(); it_p != object.polygon.end(); ++it_p) {
-			Polygon p = (Polygon)*it_p;
-			if (p.front(camera_)) {
-				XSetForeground(display_, graphic_context_, p.real_color(light_));
-				Vector v1(*p.vertex[0]);
-				v1 *= *m_;
-				Vector v2(*p.vertex[1]);
-				v2 *= *m_;
-				Vector v3(*p.vertex[2]);
-				v3 *= *m_;
-				
-				XPoint point[3] = {
-					(XPoint){static_cast<short>(v1.x), static_cast<short>(v1.y)},
-					(XPoint){static_cast<short>(v2.x), static_cast<short>(v2.y)},
-					(XPoint){static_cast<short>(v3.x), static_cast<short>(v3.y)}
-				};
-				XFillPolygon(display_, pix_map_, graphic_context_, point, 3, Convex, CoordModeOrigin);
-				
-				if (debug_mode) {
-					XSetForeground(display_, graphic_context_, vertex_color);
-					std::ostringstream stream;
-					stream << i++;
-					XDrawString(display_, pix_map_, graphic_context_, v1.x - 5 / 2, v1.y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
-					stream.str("");
-					stream << i++;
-					XDrawString(display_, pix_map_, graphic_context_, v2.x - 5 / 2, v2.y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
-					stream.str("");
-					stream << i++;
-					XDrawString(display_, pix_map_, graphic_context_, v3.x - 5 / 2, v3.y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
-				}
+		if (p.front(camera_)) {
+			XSetForeground(display_, graphic_context_, p.real_color(light_));
+			Vector v1(*p.vertex[0]);
+			v1 *= *m_;
+			Vector v2(*p.vertex[1]);
+			v2 *= *m_;
+			Vector v3(*p.vertex[2]);
+			v3 *= *m_;
+			
+			XPoint point[3] = {
+				(XPoint){static_cast<short>(v1.x), static_cast<short>(v1.y)},
+				(XPoint){static_cast<short>(v2.x), static_cast<short>(v2.y)},
+				(XPoint){static_cast<short>(v3.x), static_cast<short>(v3.y)}
+			};
+			XFillPolygon(display_, pix_map_, graphic_context_, point, 3, Convex, CoordModeOrigin);
+			
+			if (debug_mode) {
+				XSetForeground(display_, graphic_context_, vertex_color);
+				std::ostringstream stream;
+				stream << i++;
+				XDrawString(display_, pix_map_, graphic_context_, v1.x - 5 / 2, v1.y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
+				stream.str("");
+				stream << i++;
+				XDrawString(display_, pix_map_, graphic_context_, v2.x - 5 / 2, v2.y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
+				stream.str("");
+				stream << i++;
+				XDrawString(display_, pix_map_, graphic_context_, v3.x - 5 / 2, v3.y - 5 / 2, stream.str().c_str(), (int)stream.str().length());
 			}
 		}
 	}

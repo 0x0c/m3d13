@@ -43,6 +43,7 @@ private:
 	Camera camera_;
 	Light light_;
 	vector<Object> *objects_;
+	vector<Polygon> *drawable_;
 	Matrix *m_;
 	std::function<void(unsigned long frame, XEvent e, Window window)> event_callback_;
 public:
@@ -68,6 +69,7 @@ public:
 		XMapSubwindows(display_, window_);
 
 		objects_ = new vector<Object>;
+		drawable_ = new vector<Polygon>;
 		camera_ = camera;
 		light_ = light;
 		m_ = new Matrix(Matrix::identity());
