@@ -16,8 +16,8 @@
 void xm3d::_z_sort()
 {
 	drawable_->clear();
-	vector<Object>::iterator it_b = this->objects_->begin();
-	for (it_b = this->objects_->begin(); it_b != this->objects_->end(); ++it_b) {
+	vector<Object>::iterator it_b = this->objects->begin();
+	for (it_b = this->objects->begin(); it_b != this->objects->end(); ++it_b) {
 		Object object = (Object)*it_b;
 		vector<Polygon>::iterator it_p;
 		for (it_p = object.polygon.begin(); it_p != object.polygon.end(); ++it_p) {
@@ -120,42 +120,57 @@ void xm3d::_draw_axis()
 
 void xm3d::run()
 {
+	this->gui_button("QUIT", 10, 3, 30, 12, [=]{exit(0);});
 	suspend = false;
 	XSelectInput(display_ ,window_ , ExposureMask | ButtonPressMask | ButtonMotionMask | KeyPressMask);
 	while(!suspend) {
 		if(XPending(display_)) {
 			XNextEvent(display_, &this->e_);
-			switch (e_.type) {
-				case EnterNotify:
-					if (e_.xany.window == quit_) {
-						XSetWindowBorderWidth(display_, quit_, 2);
+			vector<GUI>::iterator it_b = this->gui->begin();
+			for (it_b = this->gui->begin(); it_b != this->gui->end(); ++it_b) {
+				GUI g = *it_b;
+				switch (e_.type) {
+					case EnterNotify:
+						if (e_.xany.window == g.w) {
+							XSetWindowBorderWidth(display_, g.w, 2);
+						}
+						break;
+					case LeaveNotify: {
+						if (e_.xany.window == g.w) {
+							XSetWindowBorderWidth(display_, g.w, 1);
+						}
 					}
-					break;
-				case LeaveNotify: {
-					if (e_.xany.window == quit_) {
-						XSetWindowBorderWidth(display_, quit_, 1);
+						break;
+					case ButtonRelease: {
+						if(e_.xany.window == g.w) {
+							g.callback();
+						}
 					}
+						break;
 				}
-					break;
-				case ButtonRelease: {
-					if(e_.xany.window == quit_) {
-						exit(0);
-					}
-				}
-					break;
 			}
 		}
 		else {
 			if (debug_mode) {
 				cout << "--draw!(" << frame_ << ")--" << endl;
 			}
-			XDrawString(display_, quit_, graphic_context_, 4, 10, "QUIT", 4);
 			XSetForeground(display_, graphic_context_, white_);
 			XFillRectangle(display_, pix_map_, graphic_context_, 0, 0, width_, height_);
 			XSetForeground(display_, graphic_context_, black_);
+
+			vector<GUI>::iterator it_b = this->gui->begin();
+			for (it_b = this->gui->begin(); it_b != this->gui->end(); ++it_b) {
+				GUI g = *it_b;
+				XDrawString(display_, g.w, graphic_context_, 4, 10, g.title.c_str(), (int)g.title.length());
+				XSetForeground(display_, graphic_context_, white_);
+				XFillRectangle(display_, pix_map_, graphic_context_, 0, 0, g.width, g.height);
+				XSetForeground(display_, graphic_context_, black_);
+			}
+			
 			this->_draw();
 			XCopyArea(display_, pix_map_, window_, graphic_context_, 0, 0, width_, height_, 0, 0);
 			XSetForeground(display_, graphic_context_, black_);
+			
 			std::ostringstream stream;
 			stream << "m3d13 version:" << m3d::version;
 			XDrawString(display_, window_, graphic_context_, 10, width_ - 10, stream.str().c_str(), (int)stream.str().length());
@@ -175,5 +190,33 @@ void xm3d::run()
 
 void xm3d::add_object(Object object)
 {
-	this->objects_->push_back(object);
+	this->objects->push_back(object);
+}
+
+void xm3d::add_point(int x, int y, int z, int color)
+{
+	Object *o = Object::fill_cube("", color);
+	o->transform(Matrix::move(x, y, z));
+	o->transform(Matrix::scale(0.02, 0.02, 0));
+	this->objects->push_back(*o);
+}
+
+void xm3d::gui_button(string title, int x, int y, int width, int height, std::function<void()>callback)
+{
+	GUI *g = new GUI();
+	g->w = XCreateSimpleWindow(display_, window_, x, y, width, height, 1, black_, white_);;
+	g->x = x;
+	g->y = y;
+	g->title = title;
+	g->width = width;
+	g->height = height;
+	g->callback = callback;
+	XMapWindow(display_, g->w);
+	XSelectInput(display_, g->w, ButtonPressMask | ButtonReleaseMask | EnterWindowMask | LeaveWindowMask);
+	gui->push_back(*g);
+}
+
+void xm3d::set_callback(std::function<void(unsigned long frame, XEvent e, Window window)> callback)
+{
+	this->event_callback_ = callback;
 }
